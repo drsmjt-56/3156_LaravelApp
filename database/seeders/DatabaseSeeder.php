@@ -9,7 +9,6 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        // USER ADMIN
         User::create([
             'name' => 'Admin Amikom',
             'email' => 'admin@amikom.ac.id',
@@ -17,7 +16,6 @@ class DatabaseSeeder extends Seeder
             'role' => 'admin',
         ]);
 
-        // CATEGORIES
         $seminar = \App\Models\Category::firstOrCreate([
             'name' => 'Seminar IT',
             'slug' => 'seminar-it',

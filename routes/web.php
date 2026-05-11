@@ -2,9 +2,9 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\EventController;
+// use App\Http\Controllers\EventController;
 use App\Http\Controllers\Admin\DashboardController;
-use App\Http\Controllers\Admin\EventController as AdminEventController;
+use App\Http\Controllers\Admin\EventController;
 use App\Http\Controllers\Admin\CategoryController;
 
 // Rute User Area
@@ -15,9 +15,9 @@ Route::get('/my-ticket', [EventController::class, 'ticket'])->name('ticket');
 
 
 // Rute Admin Area
-Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
+Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-    Route::get('/events', [AdminEventController::class, 'indexAdmin'])->name('events.index');
+    Route::resource('events', EventController::class);
     Route::get('/transactions', function () {return view('admin.transactions');})->name('transactions.index');
     Route::get('/categories', [CategoryController::class, 'index'])->name('categories.index');
     // dan seterusnya...
