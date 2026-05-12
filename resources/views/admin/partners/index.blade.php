@@ -1,16 +1,22 @@
 @extends('layouts.admin')
 
 @section('content')
+
 <main class="flex-1 p-10 overflow-y-auto">
 
     <!-- HEADER -->
     <header class="flex justify-between items-center mb-10">
+
         <div>
-            <h1 class="text-3xl font-black">Kelola Partner</h1>
+
+            <h1 class="text-3xl font-black">
+                Kelola Partner
+            </h1>
 
             <p class="text-slate-500 font-medium">
                 Atur data partner pendukung event di sini.
             </p>
+
         </div>
 
         <!-- TOMBOL TAMBAH -->
@@ -20,13 +26,17 @@
 
             + Tambah Partner
         </a>
+
     </header>
 
     <!-- ALERT SUCCESS -->
     @if (session('success'))
 
-        <div class="mb-6 px-6 py-4 bg-green-100 text-green-700 border border-green-200 rounded-2xl">
+        <div
+            class="mb-6 px-6 py-4 bg-green-100 text-green-700 border border-green-200 rounded-2xl">
+
             {{ session('success') }}
+
         </div>
 
     @endif
@@ -39,10 +49,23 @@
             <thead class="bg-slate-50 text-slate-400 uppercase text-xs">
 
                 <tr>
-                    <th class="px-8 py-4 w-16">No</th>
-                    <th class="px-8 py-4">Logo</th>
-                    <th class="px-8 py-4">Nama Partner</th>
-                    <th class="px-8 py-4">Aksi</th>
+
+                    <th class="px-8 py-4 w-16">
+                        No
+                    </th>
+
+                    <th class="px-8 py-4">
+                        Logo
+                    </th>
+
+                    <th class="px-8 py-4">
+                        Nama Partner
+                    </th>
+
+                    <th class="px-8 py-4">
+                        Aksi
+                    </th>
+
                 </tr>
 
             </thead>
@@ -55,7 +78,9 @@
 
                     <!-- NOMOR -->
                     <td class="px-8 py-6">
+
                         {{ $loop->iteration }}
+
                     </td>
 
                     <!-- LOGO -->
@@ -68,9 +93,11 @@
 
                     </td>
 
-                    <!-- NAMA PARTNER -->
+                    <!-- NAMA -->
                     <td class="px-8 py-6 font-semibold">
+
                         {{ $partner->name }}
+
                     </td>
 
                     <!-- AKSI -->
@@ -78,17 +105,31 @@
 
                         <div class="flex gap-2">
 
-                            <button
+                            <!-- EDIT -->
+                            <a
+                                href="{{ route('admin.partners.edit', $partner->id) }}"
                                 class="px-4 py-2 bg-indigo-500 text-white rounded-lg hover:bg-indigo-600 transition">
 
                                 Edit
-                            </button>
+                            </a>
 
-                            <button
-                                class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition">
+                            <!-- DELETE -->
+                            <form
+                                action="{{ route('admin.partners.destroy', $partner->id) }}"
+                                method="POST"
+                                onsubmit="return confirm('Yakin ingin menghapus partner ini?')">
 
-                                Hapus
-                            </button>
+                                @csrf
+                                @method('DELETE')
+
+                                <button
+                                    type="submit"
+                                    class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition">
+
+                                    Hapus
+                                </button>
+
+                            </form>
 
                         </div>
 
@@ -105,4 +146,5 @@
     </div>
 
 </main>
-@endsectionsdu
+
+@endsection
