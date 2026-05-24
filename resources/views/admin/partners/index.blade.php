@@ -5,7 +5,7 @@
 <main class="flex-1 p-10 overflow-y-auto">
 
     <!-- HEADER -->
-    <header class="flex justify-between items-center mb-10">
+    <header class="flex items-center justify-between mb-10">
 
         <div>
 
@@ -13,27 +13,26 @@
                 Kelola Partner
             </h1>
 
-            <p class="text-slate-500 font-medium">
-                Atur data partner pendukung event di sini.
+            <p class="mt-2 font-medium text-slate-500">
+                Atur semua partner pendukung platform.
             </p>
 
         </div>
 
-        <!-- TOMBOL TAMBAH -->
-        <a
-            href="{{ route('admin.partners.create') }}"
-            class="px-6 py-3 bg-indigo-600 text-white rounded-2xl font-bold hover:bg-indigo-700 transition">
+        <!-- BUTTON -->
+        <a href="{{ route('admin.partners.create') }}"
+            class="inline-flex items-center gap-2 rounded-2xl bg-indigo-600 px-6 py-3 font-bold text-white shadow-lg shadow-indigo-100 transition hover:bg-indigo-700 active:scale-95">
 
             + Tambah Partner
+
         </a>
 
     </header>
 
-    <!-- ALERT SUCCESS -->
+    <!-- ALERT -->
     @if (session('success'))
 
-        <div
-            class="mb-6 px-6 py-4 bg-green-100 text-green-700 border border-green-200 rounded-2xl">
+        <div class="mb-6 rounded-2xl border border-green-200 bg-green-100 px-6 py-4 text-green-700">
 
             {{ session('success') }}
 
@@ -41,107 +40,210 @@
 
     @endif
 
+    <!-- SEARCH -->
+    <div class="mb-6">
+
+        <form
+            action="{{ route('admin.partners.index') }}"
+            method="GET"
+            class="flex gap-3">
+
+            <input
+                type="text"
+                name="search"
+                value="{{ request('search') }}"
+                placeholder="Cari partner..."
+                class="w-full rounded-2xl border border-slate-200 px-5 py-4 focus:border-indigo-500 focus:outline-none">
+
+            <button
+                type="submit"
+                class="rounded-2xl bg-indigo-600 px-6 py-4 font-bold text-white transition hover:bg-indigo-700">
+
+                Search
+
+            </button>
+
+        </form>
+
+    </div>
+
     <!-- TABLE -->
-    <div class="bg-white rounded-[2rem] border shadow-sm overflow-hidden">
+    <div class="overflow-hidden rounded-[2.5rem] border border-slate-100 bg-white shadow-sm">
 
-        <table class="w-full text-left border-collapse">
+        <div class="overflow-x-auto">
 
-            <thead class="bg-slate-50 text-slate-400 uppercase text-xs">
+            <table class="w-full border-collapse text-left">
 
-                <tr>
+                <!-- HEAD -->
+                <thead
+                    class="bg-slate-50 text-[10px] font-black uppercase tracking-widest text-slate-400">
 
-                    <th class="px-8 py-4 w-16">
-                        No
-                    </th>
+                    <tr>
 
-                    <th class="px-8 py-4">
-                        Logo
-                    </th>
+                        <th class="w-16 px-8 py-4">
+                            No
+                        </th>
 
-                    <th class="px-8 py-4">
-                        Nama Partner
-                    </th>
+                        <th class="px-8 py-4">
+                            Logo
+                        </th>
 
-                    <th class="px-8 py-4">
-                        Aksi
-                    </th>
+                        <th class="px-8 py-4">
+                            Nama Partner
+                        </th>
 
-                </tr>
+                        <th class="px-8 py-4">
+                            Tanggal Dibuat
+                        </th>
 
-            </thead>
+                        <th class="px-8 py-4">
+                            Aksi
+                        </th>
 
-            <tbody class="divide-y">
+                    </tr>
 
-                @foreach ($partners as $partner)
+                </thead>
 
-                <tr class="hover:bg-slate-50">
+                <!-- BODY -->
+                <tbody class="divide-y border-t">
 
-                    <!-- NOMOR -->
-                    <td class="px-8 py-6">
+                    @forelse ($partners as $partner)
 
-                        {{ $loop->iteration }}
+                        <tr class="transition hover:bg-slate-50/50">
 
-                    </td>
+                            <!-- NUMBER -->
+                            <td class="px-8 py-6 font-bold text-slate-400">
 
-                    <!-- LOGO -->
-                    <td class="px-8 py-6">
+                                {{ $loop->iteration }}
 
-                        <img
-                            src="{{ $partner->logo_url }}"
-                            alt="{{ $partner->name }}"
-                            class="w-16 h-16 rounded-xl object-cover border">
+                            </td>
 
-                    </td>
+                            <!-- LOGO -->
+                            <td class="px-8 py-6">
 
-                    <!-- NAMA -->
-                    <td class="px-8 py-6 font-semibold">
+                                @if ($partner->logo_url)
 
-                        {{ $partner->name }}
+                                    <img
+                                        src="{{ asset('storage/' . $partner->logo_url) }}"
+                                        alt="{{ $partner->name }}"
+                                        class="h-16 w-16 rounded-2xl object-cover border border-slate-100">
 
-                    </td>
+                                @else
 
-                    <!-- AKSI -->
-                    <td class="px-8 py-6">
+                                    <div
+                                        class="flex h-16 w-16 items-center justify-center rounded-2xl bg-slate-100 text-xs text-slate-400">
 
-                        <div class="flex gap-2">
+                                        No Logo
 
-                            <!-- EDIT -->
-                            <a
-                                href="{{ route('admin.partners.edit', $partner->id) }}"
-                                class="px-4 py-2 bg-indigo-500 text-white rounded-lg hover:bg-indigo-600 transition">
+                                    </div>
 
-                                Edit
-                            </a>
+                                @endif
 
-                            <!-- DELETE -->
-                            <form
-                                action="{{ route('admin.partners.destroy', $partner->id) }}"
-                                method="POST"
-                                onsubmit="return confirm('Yakin ingin menghapus partner ini?')">
+                            </td>
 
-                                @csrf
-                                @method('DELETE')
+                            <!-- NAME -->
+                            <td class="px-8 py-6">
 
-                                <button
-                                    type="submit"
-                                    class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition">
+                                <h3 class="font-black text-slate-800">
 
-                                    Hapus
-                                </button>
+                                    {{ $partner->name }}
 
-                            </form>
+                                </h3>
 
-                        </div>
+                            </td>
 
-                    </td>
+                            <!-- DATE -->
+                            <td class="px-8 py-6 text-slate-500">
 
-                </tr>
+                                {{ \Carbon\Carbon::parse($partner->created_at)->format('d M Y, H:i') }}
 
-                @endforeach
+                            </td>
 
-            </tbody>
+                            <!-- ACTION -->
+                            <td class="px-8 py-6">
 
-        </table>
+                                <div class="flex gap-2">
+
+                                    <!-- EDIT -->
+                                    <a href="{{ route('admin.partners.edit', $partner->id) }}"
+                                        class="rounded-xl bg-indigo-50 p-2.5 text-indigo-600 transition hover:bg-indigo-600 hover:text-white">
+
+                                        <svg
+                                            class="h-5 w-5"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            viewBox="0 0 24 24">
+
+                                            <path
+                                                stroke-linecap="round"
+                                                stroke-linejoin="round"
+                                                stroke-width="2"
+                                                d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z">
+                                            </path>
+
+                                        </svg>
+
+                                    </a>
+
+                                    <!-- DELETE -->
+                                    <form
+                                        action="{{ route('admin.partners.destroy', $partner->id) }}"
+                                        method="POST"
+                                        onsubmit="return confirm('Anda yakin ingin menghapus partner ini?')">
+
+                                        @csrf
+                                        @method('DELETE')
+
+                                        <button
+                                            type="submit"
+                                            class="rounded-xl bg-rose-50 p-2.5 text-rose-600 transition hover:bg-rose-600 hover:text-white">
+
+                                            <svg
+                                                class="h-5 w-5"
+                                                fill="none"
+                                                stroke="currentColor"
+                                                viewBox="0 0 24 24">
+
+                                                <path
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                    stroke-width="2"
+                                                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
+                                                </path>
+
+                                            </svg>
+
+                                        </button>
+
+                                    </form>
+
+                                </div>
+
+                            </td>
+
+                        </tr>
+
+                    @empty
+
+                        <tr>
+
+                            <td
+                                colspan="5"
+                                class="px-8 py-12 text-center text-slate-500">
+
+                                Belum ada partner ditambahkan.
+
+                            </td>
+
+                        </tr>
+
+                    @endforelse
+
+                </tbody>
+
+            </table>
+
+        </div>
 
     </div>
 
