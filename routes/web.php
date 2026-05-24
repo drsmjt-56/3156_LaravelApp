@@ -19,12 +19,30 @@ Route::get('/my-ticket', [EventController::class, 'ticket'])->name('ticket');
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::resource('events', EventController::class);
-    Route::get('/transactions', function () {return view('admin.transactions');})->name('transactions.index');
+    Route::get('/transactions', function () {
+        return view('admin.transactions');
+    })->name('transactions.index');
+
+    //Category
     Route::get('/categories', [CategoryController::class, 'index'])->name('categories.index');
+    Route::get('/categories/create', [CategoryController::class, 'create'])->name('categories.create');
+    Route::post('/categories', [CategoryController::class, 'store'])->name('categories.store');
+    Route::get('/categories/{id}/edit', [CategoryController::class, 'edit'])->name('categories.edit');
+    Route::put('/categories/{id}', [CategoryController::class, 'update'])->name('categories.update');
+    Route::delete('/categories/{id}', [CategoryController::class, 'destroy'])->name('categories.destroy');
 
-    Route::get('/partners', [PartnerController::class, 'index'])->name('partners.index');
-    Route::get('/partners/create', [PartnerController::class, 'create'])->name('partners.create');
-    Route::post('/partners', [PartnerController::class, 'store'])->name('partners.store');
+    //Partners
+    Route::get('/partners', [PartnerController::class, 'index'])
+        ->name('partners.index');
+    Route::get('/partners/create', [PartnerController::class, 'create'])
+        ->name('partners.create');
+    Route::post('/partners', [PartnerController::class, 'store'])
+        ->name('partners.store');
+    Route::get('/partners/{partner}/edit', [PartnerController::class, 'edit'])
+        ->name('partners.edit');
+    Route::put('/partners/{partner}', [PartnerController::class, 'update'])
+        ->name('partners.update');
+    Route::delete('/partners/{partner}', [PartnerController::class, 'destroy'])
+        ->name('partners.destroy');
     // dan seterusnya...
-   });
-
+});

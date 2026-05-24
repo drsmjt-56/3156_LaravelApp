@@ -1,62 +1,198 @@
 @extends('layouts.admin')
+
 @section('content')
-    <div class="p-6 max-w-4xl mx-auto">
-        <h2 class="text-2xl font-bold mb-6 text-gray800">Menyunting Pengaturan Event</h2>
-        <form action="{{ route('admin.events.update', $event->id) }}" method="POST"
-            class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+
+<main class="flex-1 p-10 overflow-y-auto">
+
+    <!-- HEADER -->
+    <header class="mb-10">
+
+        <h1 class="text-3xl font-black">
+            Edit Event
+        </h1>
+
+        <p class="mt-2 font-medium text-slate-500">
+            Perbarui informasi event yang dipilih.
+        </p>
+
+    </header>
+
+    <!-- FORM -->
+    <div class="rounded-[2.5rem] border border-slate-100 bg-white p-10 shadow-sm">
+
+        <form
+            action="{{ route('admin.events.update', $event->id) }}"
+            method="POST"
+            enctype="multipart/form-data"
+            class="space-y-8">
+
             @csrf
             @method('PUT')
 
-            <div class="mb-4">
-                <label class="block mb-2 font-medium text-gray700">Judul Event</label>
-                <input type="text" name="title" value="{{ $event->title }}"
-                    class="w-full border border-gray-300 p-2.5 rounded focus:ring focus:ring-blue-200" required>
+            <!-- TITLE -->
+            <div>
+
+                <label class="mb-3 block font-bold text-slate-700">
+                    Judul Event
+                </label>
+
+                <input
+                    type="text"
+                    name="title"
+                    value="{{ old('title', $event->title) }}"
+                    class="w-full rounded-2xl border border-slate-200 px-5 py-4 focus:border-indigo-500 focus:outline-none">
+
             </div>
 
-            <div class="mb-4">
-                <label class="block mb-2 font-medium text-gray700">Kategori Event</label>
-                <select name="category_id" class="w-full border border-gray-300 p-2.5 rounded" required>
+            <!-- CATEGORY -->
+            <div>
+
+                <label class="mb-3 block font-bold text-slate-700">
+                    Kategori
+                </label>
+
+                <select
+                    name="category_id"
+                    class="w-full rounded-2xl border border-slate-200 px-5 py-4 focus:border-indigo-500 focus:outline-none">
+
                     @foreach ($categories as $category)
-                        <!-- Teknik logika kondisional (Ternary)
-    memastikan pemilihan menu default merujuk pada kategori
-    sebelumnya -->
-                        <option value="{{ $category->id }}" {{ $event->category_id == $category->id ? 'selected' : '' }}>
+
+                        <option
+                            value="{{ $category->id }}"
+                            {{ $event->category_id == $category->id ? 'selected' : '' }}>
+
                             {{ $category->name }}
+
                         </option>
+
                     @endforeach
+
                 </select>
+
             </div>
-            <div class="mb-4">
-                <label class="block mb-2 font-medium text-gray700">Deskripsi Pendek</label>
-                <textarea name="description" class="w-full border border-gray-300 p-2.5 rounded" rows="3" required>{{ $event->description }}</textarea>
+
+            <!-- DESCRIPTION -->
+            <div>
+
+                <label class="mb-3 block font-bold text-slate-700">
+                    Deskripsi
+                </label>
+
+                <textarea
+                    name="description"
+                    rows="5"
+                    class="w-full rounded-2xl border border-slate-200 px-5 py-4 focus:border-indigo-500 focus:outline-none">{{ old('description', $event->description) }}</textarea>
+
             </div>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-5 mb4">
-                <div>
-                    <label class="block mb-2 font-medium textgray-700">Tanggal & Waktu</label>
-                    <input type="datetime-local" name="date"value="{{ $event->date }}"
-                        class="w-full border border-gray300 p-2.5 rounded" required>
-                </div>
-                <div>
-                    <label class="block mb-2 font-medium textgray-700">Rencana Harga Masuk (Rp)</label>
-                    <input type="number" name="price" value="{{ $event->price }}"
-                        class="w-full border border-gray-300 p-2.5 rounded" required>
-                </div>
-                <div>
-                    <label class="block mb-2 font-medium textgray-700">Kapasitas Stok Kuota</label>
-                    <input type="number" name="stock" value="{{ $event->stock }}"
-                        class="w-full border border-gray-300 p-2.5 rounded" required>
-                </div>
+
+            <!-- DATE -->
+            <div>
+
+                <label class="mb-3 block font-bold text-slate-700">
+                    Tanggal Event
+                </label>
+
+                <input
+                    type="datetime-local"
+                    name="date"
+                    value="{{ \Carbon\Carbon::parse($event->date)->format('Y-m-d\TH:i') }}"
+                    class="w-full rounded-2xl border border-slate-200 px-5 py-4 focus:border-indigo-500 focus:outline-none">
+
             </div>
-            <div class="mb-6">
-                <label class="block mb-2 font-medium text-gray700">Lokasi / Gedung</label>
-                <input type="text" name="location" value="{{ $event->location }}"
-                    class="w-full border border-gray-300 p2.5 rounded" required>
+
+            <!-- LOCATION -->
+            <div>
+
+                <label class="mb-3 block font-bold text-slate-700">
+                    Lokasi
+                </label>
+
+                <input
+                    type="text"
+                    name="location"
+                    value="{{ old('location', $event->location) }}"
+                    class="w-full rounded-2xl border border-slate-200 px-5 py-4 focus:border-indigo-500 focus:outline-none">
+
             </div>
-            <div class="flex justify-end border-t pt-4">
-                <button type="submit"
-                    class="bg-blue-600 textwhite px-8 py-2.5 rounded font-semibold hover:bg-blue-700 shadow-md">Simpan
-                    Perubahan</button>
+
+            <!-- PRICE -->
+            <div>
+
+                <label class="mb-3 block font-bold text-slate-700">
+                    Harga Tiket
+                </label>
+
+                <input
+                    type="number"
+                    name="price"
+                    value="{{ old('price', $event->price) }}"
+                    class="w-full rounded-2xl border border-slate-200 px-5 py-4 focus:border-indigo-500 focus:outline-none">
+
             </div>
+
+            <!-- STOCK -->
+            <div>
+
+                <label class="mb-3 block font-bold text-slate-700">
+                    Stok Tiket
+                </label>
+
+                <input
+                    type="number"
+                    name="stock"
+                    value="{{ old('stock', $event->stock) }}"
+                    class="w-full rounded-2xl border border-slate-200 px-5 py-4 focus:border-indigo-500 focus:outline-none">
+
+            </div>
+
+            <!-- POSTER -->
+            <div>
+
+                <label class="mb-3 block font-bold text-slate-700">
+                    Poster Event
+                </label>
+
+                @if ($event->poster_path)
+
+                    <img
+                        src="{{ asset('storage/events/' . $event->poster_path) }}"
+                        alt="{{ $event->title }}"
+                        class="mb-4 h-40 rounded-2xl object-cover">
+
+                @endif
+
+                <input
+                    type="file"
+                    name="poster_path"
+                    class="w-full rounded-2xl border border-slate-200 px-5 py-4 focus:border-indigo-500 focus:outline-none">
+
+            </div>
+
+            <!-- BUTTON -->
+            <div class="flex gap-4 pt-4">
+
+                <button
+                    type="submit"
+                    class="rounded-2xl bg-indigo-600 px-8 py-4 font-bold text-white shadow-lg shadow-indigo-100 transition hover:bg-indigo-700 active:scale-95">
+
+                    Update Event
+
+                </button>
+
+                <a
+                    href="{{ route('admin.events.index') }}"
+                    class="rounded-2xl border border-slate-200 px-8 py-4 font-bold text-slate-600 transition hover:bg-slate-100">
+
+                    Batal
+
+                </a>
+
+            </div>
+
         </form>
+
     </div>
+
+</main>
+
 @endsection

@@ -1,17 +1,18 @@
-@extends ('layouts.app')
-@section ('content')
+@extends('layouts.app')
 
-    <!-- Hero Section -->
+@section('content')
+
+    <!-- HERO SECTION -->
     <section class="mx-auto flex max-w-7xl flex-col items-center gap-12 px-6 py-20 md:flex-row">
 
         <div class="flex-1 space-y-8">
 
             <span
-                class="inline-block rounded-full bg-indigo-100 px-4 py-1.5 text-sm font-bold tracking-wider text-indigo-700 uppercase">
+                class="inline-block rounded-full bg-indigo-100 px-4 py-1.5 text-sm font-bold uppercase tracking-wider text-indigo-700">
                 #1 Event Platform
             </span>
 
-            <h1 class="text-5xl leading-tight font-extrabold md:text-7xl">
+            <h1 class="text-5xl font-extrabold leading-tight md:text-7xl">
                 Temukan & Pesan
                 <span class="text-indigo-600">Tiket Event</span>
                 Impianmu.
@@ -39,64 +40,34 @@
                 </a>
 
             </div>
+
         </div>
 
+        <!-- HERO IMAGE -->
         <div class="relative flex-1">
 
             <div
-                class="animate-blob absolute -top-10 -left-10 h-64 w-64 rounded-full bg-indigo-400 opacity-20 mix-blend-multiply blur-3xl filter">
+                class="animate-blob absolute -top-10 -left-10 h-64 w-64 rounded-full bg-indigo-400 opacity-20 blur-3xl mix-blend-multiply filter">
             </div>
 
             <div
-                class="animate-blob animation-delay-2000 absolute -right-10 -bottom-10 h-64 w-64 rounded-full bg-purple-400 opacity-20 mix-blend-multiply blur-3xl filter">
+                class="animate-blob animation-delay-2000 absolute -right-10 -bottom-10 h-64 w-64 rounded-full bg-purple-400 opacity-20 blur-3xl mix-blend-multiply filter">
             </div>
 
             <img
-                src="assets/concert.png"
+                src="{{ asset('assets/concert.png') }}"
                 alt="Concert"
-                class="relative z-10 aspect-[4/5] w-full rounded-[2rem] object-cover object-center shadow-2xl" />
+                class="relative z-10 aspect-[4/5] w-full rounded-[2rem] object-cover object-center shadow-2xl">
 
-            <div
-                class="glass absolute -bottom-6 -left-6 z-20 rounded-2xl border border-white p-6 shadow-xl">
-
-                <div class="flex items-center gap-4">
-
-                    <div
-                        class="flex h-12 w-12 items-center justify-center rounded-full bg-green-100 text-green-600">
-
-                        <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                stroke-width="2"
-                                d="M5 13l4 4L19 7">
-                            </path>
-                        </svg>
-
-                    </div>
-
-                    <div>
-
-                        <p class="text-xs font-bold text-slate-500 uppercase">
-                            Terverifikasi
-                        </p>
-
-                        <p class="font-bold">
-                            Pembayaran Aman via Midtrans
-                        </p>
-
-                    </div>
-                </div>
-            </div>
         </div>
+
     </section>
 
-    <!-- Events Grid -->
+    <!-- EVENTS -->
     <section id="events" class="mx-auto max-w-7xl px-6 py-20">
 
         <div class="mb-12 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
 
-            <!-- Judul -->
             <div>
 
                 <h2 class="mb-2 text-3xl font-extrabold">
@@ -109,18 +80,16 @@
 
             </div>
 
-            <!-- Filter Kategori -->
+            <!-- FILTER CATEGORY -->
             <div class="flex flex-wrap gap-3">
 
-                <!-- Semua Kategori -->
                 <a
                     href="/"
-                    class="rounded-full bg-gray-200 px-5 py-2.5 text-sm font-semibold text-black shadow-sm transition-all duration-300 hover:-translate-y-1 hover:bg-indigo-600 hover:text-white hover:shadow-lg">
+                    class="rounded-full bg-slate-200 px-5 py-2.5 text-sm font-semibold text-slate-700 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:bg-indigo-600 hover:text-white hover:shadow-lg">
 
                     Semua Kategori
                 </a>
 
-                <!-- Kategori Dinamis -->
                 @foreach ($categories as $cat)
 
                     <a
@@ -128,58 +97,60 @@
                         class="rounded-full bg-indigo-100 px-5 py-2.5 text-sm font-semibold text-indigo-700 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:bg-indigo-600 hover:text-white hover:shadow-lg">
 
                         {{ $cat->name }}
+
                     </a>
 
                 @endforeach
 
             </div>
+
         </div>
 
-        <!-- Card Event -->
+        <!-- EVENT GRID -->
         <div class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
 
-            @foreach ($events as $event)
+            @forelse ($events as $event)
 
                 <div
-                    class="group borderslate-100 overflow-hidden rounded-3xl border bg-white shadow-sm transition-all duration-300 hover:shadow-2xl">
+                    class="group overflow-hidden rounded-3xl border border-slate-100 bg-white shadow-sm transition-all duration-300 hover:shadow-2xl">
 
+                    <!-- IMAGE -->
                     <div class="relative aspect-[3/4] overflow-hidden">
 
-                        <img
-                            src="https://placehold.co/200x600"
-                            alt="{{ $event->title }}"
-                            class="grouphover:scale-110 h-full w-full object-cover transition-transform duration-500" />
+                        @if ($event->poster_path)
 
+                            <img
+                                src="{{ asset('storage/events/' . $event->poster_path) }}"
+                                alt="{{ $event->title }}"
+                                class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110">
+
+                        @else
+
+                            <img
+                                src="https://placehold.co/600x800"
+                                alt="No Image"
+                                class="h-full w-full object-cover">
+
+                        @endif
+
+                        <!-- CATEGORY -->
                         <div
-                            class="bgwhite/90 absolute top-4 left-4 rounded-lg px-3 py-1 text-xs font-bold text-indigo-600 uppercase backdrop-blur">
+                            class="absolute top-4 left-4 rounded-lg bg-white/90 px-3 py-1 text-xs font-bold uppercase text-indigo-600 backdrop-blur">
 
-                            {{ $event->category->name }}
+                            {{ $event->category->name ?? 'Tanpa Kategori' }}
 
                         </div>
+
                     </div>
 
+                    <!-- CONTENT -->
                     <div class="p-6">
 
-                        <h3 class="grouphover:text-indigo-600 mb-2 text-xl font-bold transition">
+                        <h3 class="mb-2 text-xl font-bold transition group-hover:text-indigo-600">
                             {{ $event->title }}
                         </h3>
 
-                        <div class="text-slate500 mb-4 flex items-center gap-2 text-sm">
-
-                            <svg
-                                class="h-4 w-4"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24">
-
-                                <path
-                                    stroke-linecap="round"
-                                    strokelinejoin="round"
-                                    stroke-width="2"
-                                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z">
-                                </path>
-
-                            </svg>
+                        <div class="mb-4 flex items-center gap-2 text-sm text-slate-500">
 
                             <span>
                                 {{ \Carbon\Carbon::parse($event->date)->format('d-m-Y H:i') }}
@@ -189,24 +160,101 @@
 
                         <div class="flex items-center justify-between border-t pt-4">
 
-                            <span class="textindigo-600 text-2xl font-black">
+                            <span class="text-2xl font-black text-indigo-600">
                                 Rp {{ number_format($event->price, 0, ',', '.') }}
                             </span>
 
                             <a
-                                href="{{ url('event/1') }}"
-                                class="textindigo-600 rounded-xl bg-indigo-50 px-5 py-2 font-bold transition hover:bg-indigo-600 hover:text-white">
+                                href="{{ route('events.show', $event->id) }}"
+                                class="rounded-xl bg-indigo-50 px-5 py-2 font-bold text-indigo-600 transition hover:bg-indigo-600 hover:text-white">
 
                                 Lihat Detail
                             </a>
 
                         </div>
+
                     </div>
+
                 </div>
 
-            @endforeach
+            @empty
+
+                <div class="col-span-full rounded-3xl border border-dashed py-20 text-center text-slate-500">
+
+                    Belum ada event tersedia.
+
+                </div>
+
+            @endforelse
 
         </div>
+
+    </section>
+
+    <!-- PARTNER -->
+    <section class="bg-slate-50 py-20 border-t border-slate-100">
+
+        <div class="mx-auto max-w-7xl px-6">
+
+            <div class="mb-14 text-center">
+
+                <h2 class="mb-3 text-3xl font-extrabold">
+                    Partner Kami
+                </h2>
+
+                <p class="font-medium text-slate-500">
+                    Didukung oleh berbagai partner terpercaya
+                </p>
+
+            </div>
+
+            <div class="grid grid-cols-2 gap-6 md:grid-cols-3 lg:grid-cols-5">
+
+                @forelse ($partners as $partner)
+
+                    <div
+                        class="group rounded-3xl border border-slate-100 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl">
+
+                        <div class="mb-4 flex h-24 items-center justify-center">
+
+                            @if ($partner->logo_url)
+
+                                <img
+                                    src="{{ asset('storage/' . $partner->logo_url) }}"
+                                    alt="{{ $partner->name }}"
+                                    class="max-h-20 object-contain grayscale transition-all duration-300 group-hover:grayscale-0">
+
+                            @else
+
+                                <img
+                                    src="https://placehold.co/200x100"
+                                    alt="{{ $partner->name }}"
+                                    class="max-h-20 object-contain">
+
+                            @endif
+
+                        </div>
+
+                        <h3 class="text-center text-sm font-bold text-slate-700 transition group-hover:text-indigo-600">
+                            {{ $partner->name }}
+                        </h3>
+
+                    </div>
+
+                @empty
+
+                    <div class="col-span-full rounded-3xl border border-dashed py-12 text-center text-slate-500">
+
+                        Belum ada partner tersedia.
+
+                    </div>
+
+                @endforelse
+
+            </div>
+
+        </div>
+
     </section>
 
 @endsection
