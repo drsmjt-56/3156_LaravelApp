@@ -94,7 +94,7 @@
                             <td class="px-8 py-6">
                                 @if ($partner->logo_url)
                                     <img
-                                        src="{{ asset('storage/' . $partner->logo_url) }}"
+                                        src="{{ asset('storage/partners/' . $partner->logo_url) }}"
                                         alt="{{ $partner->name }}"
                                         class="h-16 w-16 rounded-2xl object-cover border border-slate-100">
                                 @else
