@@ -168,7 +168,7 @@
                         <div class="mb-4 flex h-24 items-center justify-center">
                             @if ($partner->logo_url)
                                 <img
-                                    src="{{ asset('storage/' . $partner->logo_url) }}"
+                                    src="{{ asset('storage/partners/' . $partner->logo_url) }}"
                                     alt="{{ $partner->name }}"
                                     class="max-h-20 object-contain grayscale transition-all duration-300 group-hover:grayscale-0">
 

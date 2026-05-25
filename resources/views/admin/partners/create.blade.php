@@ -2,29 +2,31 @@
 
 @section('content')
 
-<main class="flex-1 p-10 overflow-y-auto">
-    <!-- HEADER -->
-    <header class="mb-10">
-        <h1 class="text-3xl font-black">
+<div class="p-8">
+
+    <div class="mb-8">
+        <h1 class="text-3xl font-black text-slate-800">
             Tambah Partner
         </h1>
-        <p class="mt-2 font-medium text-slate-500">
-            Tambahkan partner baru pendukung platform.
-        </p>
-    </header>
 
-    <!-- FORM -->
-    <div class="rounded-[2.5rem] border border-slate-100 bg-white p-10 shadow-sm">
+        <p class="text-slate-500 mt-2">
+            Tambahkan partner pendukung platform.
+        </p>
+    </div>
+
+    <div class="bg-white rounded-[2rem] border border-slate-100 shadow-sm p-8">
+
         <form
             action="{{ route('admin.partners.store') }}"
             method="POST"
             enctype="multipart/form-data"
-            class="space-y-8">
+            class="space-y-6">
+
             @csrf
 
-            <!-- NAME -->
+            <!-- Nama -->
             <div>
-                <label class="mb-3 block font-bold text-slate-700">
+                <label class="block text-sm font-bold text-slate-700 mb-2">
                     Nama Partner
                 </label>
 
@@ -32,38 +34,46 @@
                     type="text"
                     name="name"
                     value="{{ old('name') }}"
-                    placeholder="Masukkan nama partner"
-                    class="w-full rounded-2xl border border-slate-200 px-5 py-4 focus:border-indigo-500 focus:outline-none">
+                    class="w-full rounded-2xl border border-slate-200 px-5 py-4 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    placeholder="Masukkan nama partner">
+
+                @error('name')
+                    <p class="text-red-500 text-sm mt-2">{{ $message }}</p>
+                @enderror
             </div>
 
-            <!-- LOGO -->
+            <!-- Logo -->
             <div>
-                <label class="mb-3 block font-bold text-slate-700">
+                <label class="block text-sm font-bold text-slate-700 mb-2">
                     Logo Partner
                 </label>
 
                 <input
                     type="file"
                     name="logo_url"
-                    class="w-full rounded-2xl border border-slate-200 px-5 py-4 focus:border-indigo-500 focus:outline-none">
-            </div>
+                    class="w-full rounded-2xl border border-slate-200 px-5 py-4">
 
-            <!-- BUTTON -->
-            <div class="flex gap-4 pt-4">
+                @error('logo_url')
+                    <p class="text-red-500 text-sm mt-2">{{ $message }}</p>
+                @enderror
+            </div>
+            <!-- Button -->
+            <div class="flex gap-3 pt-4">
+
                 <button
                     type="submit"
-                    class="rounded-2xl bg-indigo-600 px-8 py-4 font-bold text-white shadow-lg shadow-indigo-100 transition hover:bg-indigo-700 active:scale-95">
-                    Simpan Partner
+                    class="px-6 py-3 bg-indigo-600 text-white rounded-2xl font-bold hover:bg-indigo-700 transition">
+                    Simpan
                 </button>
 
                 <a
                     href="{{ route('admin.partners.index') }}"
-                    class="rounded-2xl border border-slate-200 px-8 py-4 font-bold text-slate-600 transition hover:bg-slate-100">
-                    Batal
+                    class="px-6 py-3 bg-slate-100 text-slate-700 rounded-2xl font-bold hover:bg-slate-200 transition">
+                    Kembali
                 </a>
             </div>
         </form>
     </div>
-</main>
+</div>
 
 @endsection
