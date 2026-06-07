@@ -37,7 +37,7 @@
                 </svg>
                 Dashboard
             </a>
-            <a href="{{url('/admin/events')}}"
+            <a href="{{ url('/admin/events') }}"
                 class="flex items-center gap-3 px-4 py-3 hover:bg-indigo-800 rounded-xl font-bold transition">
                 <svg class="w-5 h-5 text-indigo-400 group-hover:text-indigo-300" fill="none" stroke="currentColor"
                     viewBox="0 0 24 24">
@@ -48,7 +48,7 @@
                 Kelola Event
             </a>
 
-            
+
 
             <a href="{{ url('/admin/categories') }}"
                 class="flex items-center gap-3 px-4 py-3 hover:bg-indigo-800 rounded-xl font-bold transition">
@@ -82,20 +82,21 @@
         </nav>
 
         <div class="pt-6 border-t border-indigo-800">
-            <a href="{{ route('home') }}"
-                class="flex items-center gap-3 px-4 py-3 text-indigo-300 hover:text-white transition font-medium">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1">
-                    </path>
-                </svg>
-                Keluar
-            </a>
+            <form action="{{ route('admin.logout') }}" method="POST">
+                @csrf
+                <button type="submit"
+                    class="flex items-center gap-3 px-4 py-3 text-indigo-300 hover:text-white transition font-medium w-full text-left">
+
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1">
+                        </path>
+                    </svg>
+                    Keluar
+                </button>
+            </form>
         </div>
     </aside>
-
     @yield('content')
-
 </body>
-
 </html>

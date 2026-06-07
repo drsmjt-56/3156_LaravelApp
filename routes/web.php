@@ -7,22 +7,35 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\EventController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\PartnerController;
+use App\Http\Controllers\Admin\TransactionController;
+use App\Http\Controllers\Admin\AuthController;
 
 // Rute User Area
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/event/1', [EventController::class, 'show'])->name('events.show');
 Route::get('/checkout', [EventController::class, 'checkout'])->name('checkout');
 Route::get('/my-ticket', [EventController::class, 'ticket'])->name('ticket');
+Route::get('/login', function () {
+    return redirect()->route('admin.login');
+})->name('login');
 
 
 // Rute Admin Area
 Route::prefix('admin')->name('admin.')->group(function () {
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-    Route::resource('events', EventController::class);
-    Route::get('/transactions', function () {
-        return view('admin.transactions');
-    })->name('transactions.index');
+    //Login bebas akses
+    Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
+    Route::post('login', [AuthController::class, 'login'])->name('login.post');
+    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
+    //harus login dulu
+    Route::middleware(['auth'])->group(function () {
+        Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+        Route::resource('events', EventController::class);
+        Route::get('/transactions', function () {
+            return view('admin.transactions');
+        })->name('transactions.index');
+
+        
     //Category
     Route::get('/categories', [CategoryController::class, 'index'])->name('categories.index');
     Route::get('/categories/create', [CategoryController::class, 'create'])->name('categories.create');
@@ -44,5 +57,6 @@ Route::prefix('admin')->name('admin.')->group(function () {
         ->name('partners.update');
     Route::delete('/partners/{partner}', [PartnerController::class, 'destroy'])
         ->name('partners.destroy');
-    // dan seterusnya...
+        // dan seterusnya...
+    });
 });
