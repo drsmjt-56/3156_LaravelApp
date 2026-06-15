@@ -98,7 +98,7 @@
                         @if ($event->poster_path)
 
                             <img
-                                src="{{ asset('storage/events/' . $event->poster_path) }}"
+                                src="{{ asset('storage/' . $event->poster_path) }}"
                                 alt="{{ $event->title }}"
                                 class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110">
                         @else
