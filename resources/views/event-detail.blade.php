@@ -48,7 +48,7 @@
         <!-- Left: Poster -->
         <div class="lg:col-span-1">
             <div class="sticky top-32">
-                <img src="{{ $event->poster_path ? asset('storage/events/' . $event->poster_path) : 'https://placehold.co/600x800' }}"
+                <img src="{{ $event->poster_path ? asset('storage/' . $event->poster_path) : 'https://placehold.co/600x800' }}"
                     alt="{{ $event->title }}" class="w-full rounded-[2.5rem] shadow-2xl border-8 border-white">
 
                 <div class="mt-8 p-6 bg-white rounded-3xl border border-slate-100 shadow-sm">
@@ -119,7 +119,7 @@
                         </p>
                     </div>
                     <div>
-                        <a href="{{ url('checkout/'.$event-id) }}"
+                        <a href="{{ url('checkout/'.$event->id) }}"
                             class="inline-block px-10 py-5 bg-white text-indigo-600 rounded-2xl font-black text-xl hover:scale-105 transition-transform shadow-xl">
                             Pesan Sekarang
                         </a>
