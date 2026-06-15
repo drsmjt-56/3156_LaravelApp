@@ -131,6 +131,7 @@
                 <input
                     type="file"
                     name="poster_path"
+                    accept="image/*"
                     class="w-full rounded-2xl border border-slate-200 px-5 py-4 focus:border-indigo-500 focus:outline-none">
             </div>
 
