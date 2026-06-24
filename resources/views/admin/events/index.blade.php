@@ -1,5 +1,9 @@
 @extends('layouts.admin')
 
+@php
+    use Illuminate\Support\Facades\Storage;
+@endphp
+
 @section('content')
     <main class="flex-1 p-10 overflow-y-auto">
         <!-- HEADER -->
@@ -70,15 +74,10 @@
 
                                 <!-- POSTER -->
                                 <td class="px-8 py-6">
-                                    @if ($event->poster_path)
-                                        <img src="{{ asset('storage/' . $event->poster_path) }}"
-                                            class="w-16 h-20 rounded-xl object-cover shadow-sm">
-                                    @else
-                                        <div
-                                            class="flex h-24 w-20 items-center justify-center rounded-xl bg-slate-100 text-xs text-slate-400">
-                                            No Image
-                                        </div>
-                                    @endif
+                                    <img src="{{ $event->poster_path && Storage::disk('public')->exists($event->poster_path)
+                                        ? asset('storage/' . $event->poster_path)
+                                        : 'https://placehold.co/16x20' }}"
+                                        class="w-16 h-20 rounded-xl object-cover shadow-sm">
                                 </td>
 
                                 <!-- EVENT INFO -->

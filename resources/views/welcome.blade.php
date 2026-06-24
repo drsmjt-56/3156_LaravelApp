@@ -1,7 +1,9 @@
 @extends('layouts.app')
 
+@php
+    use Illuminate\Support\Facades\Storage;
+@endphp
 @section('content')
-
     <!-- HERO SECTION -->
     <section class="mx-auto flex max-w-7xl flex-col items-center gap-12 px-6 py-20 md:flex-row">
         <div class="flex-1 space-y-8">
@@ -23,14 +25,12 @@
             </p>
             <div class="flex gap-4">
 
-                <a
-                    href="#events"
+                <a href="#events"
                     class="rounded-2xl bg-indigo-600 px-8 py-4 text-lg font-bold text-white shadow-xl shadow-indigo-200 transition-transform hover:scale-105">
                     Mulai Jelajah
                 </a>
 
-                <a
-                    href="#"
+                <a href="#"
                     class="rounded-2xl border-2 border-slate-200 px-8 py-4 text-lg font-bold transition hover:border-indigo-600 hover:text-indigo-600">
                     Cara Pesan
                 </a>
@@ -47,9 +47,7 @@
                 class="animate-blob animation-delay-2000 absolute -right-10 -bottom-10 h-64 w-64 rounded-full bg-purple-400 opacity-20 blur-3xl mix-blend-multiply filter">
             </div>
 
-            <img
-                src="{{ asset('assets/concert.png') }}"
-                alt="Concert"
+            <img src="{{ asset('assets/concert.png') }}" alt="Concert"
                 class="relative z-10 aspect-[4/5] w-full rounded-[2rem] object-cover object-center shadow-2xl">
         </div>
     </section>
@@ -69,16 +67,14 @@
 
             <!-- FILTER CATEGORY -->
             <div class="flex flex-wrap gap-3">
-                <a
-                    href="/"
+                <a href="/"
                     class="rounded-full bg-slate-200 px-5 py-2.5 text-sm font-semibold text-slate-700 shadow-sm transition-all
                     duration-300 hover:-translate-y-1 hover:bg-indigo-600 hover:text-white hover:shadow-lg">
                     Semua Kategori
                 </a>
 
                 @foreach ($categories as $cat)
-                    <a
-                        href="/?category={{ $cat->slug }}"
+                    <a href="/?category={{ $cat->slug }}"
                         class="rounded-full bg-indigo-100 px-5 py-2.5 text-sm font-semibold text-indigo-700 shadow-sm transition-all 
                         duration-300 hover:-translate-y-1 hover:bg-indigo-600 hover:text-white hover:shadow-lg">
                         {{ $cat->name }}
@@ -95,18 +91,11 @@
 
                     <!-- IMAGE -->
                     <div class="relative aspect-[3/4] overflow-hidden">
-                        @if ($event->poster_path)
-
-                            <img
-                                src="{{ asset('storage/' . $event->poster_path) }}"
-                                alt="{{ $event->title }}"
-                                class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110">
-                        @else
-                            <img
-                                src="https://placehold.co/600x800"
-                                alt="No Image"
-                                class="h-full w-full object-cover">
-                        @endif
+                        <img src="{{ $event->poster_path && Storage::disk('public')->exists($event->poster_path)
+                            ? asset('storage/' . $event->poster_path)
+                            : 'https://placehold.co/200x600' }}"
+                            alt="{{ $event->title }}"
+                            class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110">
 
                         <!-- CATEGORY -->
                         <div
@@ -132,8 +121,7 @@
                                 Rp {{ number_format($event->price, 0, ',', '.') }}
                             </span>
 
-                            <a
-                                href="{{ route('events.show', $event->id) }}"
+                            <a href="{{ route('events.show', $event->id) }}"
                                 class="rounded-xl bg-indigo-50 px-5 py-2 font-bold text-indigo-600 transition hover:bg-indigo-600 hover:text-white">
                                 Lihat Detail
                             </a>
@@ -148,6 +136,7 @@
             @endforelse
         </div>
     </section>
+
     <!-- PARTNER -->
     <section class="bg-slate-50 py-20 border-t border-slate-100">
         <div class="mx-auto max-w-7xl px-6">
@@ -167,15 +156,11 @@
                         class="group rounded-3xl border border-slate-100 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl">
                         <div class="mb-4 flex h-24 items-center justify-center">
                             @if ($partner->logo_url)
-                                <img
-                                    src="{{ asset('storage/partners/' . $partner->logo_url) }}"
+                                <img src="{{ asset('storage/partners/' . $partner->logo_url) }}"
                                     alt="{{ $partner->name }}"
                                     class="max-h-20 object-contain grayscale transition-all duration-300 group-hover:grayscale-0">
-
                             @else
-                                <img
-                                    src="https://placehold.co/200x100"
-                                    alt="{{ $partner->name }}"
+                                <img src="https://placehold.co/200x100" alt="{{ $partner->name }}"
                                     class="max-h-20 object-contain">
                             @endif
 

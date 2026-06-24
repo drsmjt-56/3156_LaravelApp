@@ -7,8 +7,8 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\EventController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\PartnerController;
-use App\Http\Controllers\Admin\TransactionController;
 use App\Http\Controllers\Admin\AuthController;
+use App\Http\Controllers\Admin\TransactionController;
 
 // Rute User Area
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -18,6 +18,10 @@ Route::get('/my-ticket', [EventController::class, 'ticket'])->name('ticket');
 Route::get('/login', function () {
     return redirect()->route('admin.login');
 })->name('login');
+
+//Checkout
+Route::get('/checkout/{event}', [App\Http\Controllers\CheckoutController::class, 'create'])->name('checkout.create');
+Route::post('checkout/{event}', [App\Http\Controllers\CheckoutController::class, 'store'])->name('checkout.store');
 
 
 // Rute Admin Area
@@ -31,9 +35,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::middleware(['auth'])->group(function () {
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
         Route::resource('events', EventController::class);
-        Route::get('/transactions', function () {
-            return view('admin.transactions');
-        })->name('transactions.index');
+        Route::get('transactions', [\App\Http\Controllers\Admin\TransactionController::class, 'index'])->name('transactions.index');
 
         
     //Category

@@ -125,12 +125,15 @@
                     <label class="mb-3 block font-bold text-slate-700">
                         Poster Event
                     </label>
+
                     @if ($event->poster_path)
-                        <img src="{{ asset('storage/events/' . $event->poster_path) }}" alt="{{ $event->title }}"
-                            class="mb-4 h-40 rounded-2xl object-cover">
+                        <img 
+                        src="{{ asset('storage/' . $event->poster_path) }}" 
+                        alt="{{ $event->title }}"
+                        class="mb-4 h-40 rounded-2xl object-cover">
                     @endif
 
-                    <input type="file" name="poster_path"
+                    <input type="file" name="poster"
                         class="w-full rounded-2xl border border-slate-200 px-5 py-4 focus:border-indigo-500 focus:outline-none">
                 </div>
 
