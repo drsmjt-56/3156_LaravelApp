@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('order_id')->unique();
             $table->string('customer_name');
             $table->string('customer_email');
-            $table->string('customer phone');
+            $table->string('customer_phone');
             $table->integer('total_price');
             $table->string('status')->default('Pending');
             $table->string('snap_token')->nullable();

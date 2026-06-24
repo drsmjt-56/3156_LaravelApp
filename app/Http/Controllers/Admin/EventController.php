@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Admin;
 
+use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Controller;
 use App\Models\Event;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\File;
 
 class EventController extends Controller
 {
@@ -25,25 +25,19 @@ class EventController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'category_id' => 'required',
+            'category_id' => 'required|exists:categories,id',
             'title' => 'required|string|max:255',
-            'description' => 'required|string',
+            'description' => 'nullable|string',
             'date' => 'required|date',
             'location' => 'required|string|max:255',
             'price' => 'required|numeric|min:0',
-            'stock' => 'required|numeric|min:0',
-            'poster_path' => 'nullable|image|max:2048'
+            'stock' => 'required|numeric|min:1',
+            'poster' => 'nullable|image|max:2048'
         ]);
 
-        if ($request->hasFile('poster_path')) {
-            $file = $request->file('poster_path');
-            $filename = time() . "." . $file->getClientOriginalExtension();
-            $file->move(
-                public_path('storage/event'),
-                $filename
-            );
+        if ($request->hasFile('poster')) {
 
-            $data['poster_path'] = 'event/' . $filename;
+            $data['poster_path'] = $request->file('poster')->store('posters', 'public');
         }
 
         Event::create($data);
@@ -72,49 +66,46 @@ class EventController extends Controller
    
     public function update(Request $request, Event $event)
     {
-        $data = $request->validate([
-        'category_id' => 'required',
+
+    $data = $request->validate([
+        'category_id' => 'required|exists:categories,id',
         'title' => 'required|string|max:255',
-        'description' => 'required|string',
+        'description' => 'nullable|string',
         'date' => 'required|date',
         'location' => 'required|string|max:255',
         'price' => 'required|numeric|min:0',
-        'stock' => 'required|numeric|min:0',
-        'poster_path' => 'nullable|image|max:2048'
+        'stock' => 'required|numeric|min:1',
+        'poster' => 'nullable|image|max:2048'
     ]);
 
-        if ($request->hasFile('poster_path')) {
+    if ($request->hasFile('poster')) {
 
-            if ($event->poster_path) {
-
-                $oldFile = public_path('storage/' . $event->poster_path);
-
-                if (File::exists($oldFile)) {
-                    File::delete($oldFile);
-                }
-            }
-
-            $file = $request->file('poster_path');
-
-            $filename = time() . '.' . $file->getClientOriginalExtension();
-
-            $file->move(
-                public_path('storage/event'),
-                $filename
-            );
-
-            $data['poster_path'] = 'event/' . $filename;
+        if ($event->poster_path) {
+            Storage::disk('public')->delete($event->poster_path);
         }
 
-        $event->update($data);
-
-        return redirect()->route('admin.events.index')->with('success', 'Event berhasil diperbarui.');
+        $data['poster_path'] = $request
+            ->file('poster')
+            ->store('posters', 'public');
     }
 
-    
+    $event->update($data);
+
+    return redirect()
+        ->route('admin.events.index')
+        ->with('success', 'Event berhasil diperbarui.');
+    }
+
     public function destroy(Event $event)
     {
-        $event->delete();
-        return redirect()->route('admin.events.index')->with('success', 'Data event berhasil dihapus secara permanen.');
+        if ($event->poster_path) {
+        Storage::disk('public')->delete($event->poster_path);
+    }
+
+    $event->delete();
+
+    return redirect()
+        ->route('admin.events.index')
+        ->with('success', 'Data event berhasil dihapus.');
     }
 }
