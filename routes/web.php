@@ -29,6 +29,8 @@ Route::get('/payment/{order_id}',
 
 Route::get('/success/{order_id}', [\App\Http\Controllers\CheckoutController::class, 'success'])->name('checkout.success');
 
+Route::post('/midtrans/callback', [\App\Http\Controllers\MidtransWebhookController::class, 'handle']);
+
 // Rute Admin Area
 Route::prefix('admin')->name('admin.')->group(function () {
     //Login bebas akses

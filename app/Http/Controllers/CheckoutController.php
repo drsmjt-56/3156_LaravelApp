@@ -90,32 +90,31 @@ class CheckoutController extends Controller
     }
 
     public function success($order_id)
-    {
-        // Mengambil daftar kategori untuk keperluan menu footer
-        $categories = \App\Models\Category::all();
-        $transaction = Transaction::where('order_id', $order_id)->firstOrFail();
+{
+    $categories = \App\Models\Category::all();
+    $transaction = Transaction::where('order_id', $order_id)->firstOrFail();
 
-        // Validasi status pembayaran asli dari Midtrans (Mencegah manipulasi URL)
-        \Midtrans\Config::$serverKey = env('MIDTRANS_SERVER_KEY');
-        \Midtrans\Config::$isProduction = false;
+    \Midtrans\Config::$serverKey = env('MIDTRANS_SERVER_KEY');
+    \Midtrans\Config::$isProduction = false;
 
-        try {
-            $midtransStatus = \Midtrans\Transaction::status($order_id);
+    try {
+        $midtransStatus = \Midtrans\Transaction::status($order_id);
 
-            // Hanya ubah status menjadi sukses jika Midtrans mengonfirmasi pembayaran lunas
-            if (in_array(
-                $midtransStatus->transaction_status,
-                ['capture', 'settlement']
-            )) {
-                $transaction->update(['status' => 'success']);
-            }
-        } catch (\Exception $e) {
-            // Jika error (transaksi tidak ada di Midtrans, koneksi terputus), kembalikan ke beranda
-            return redirect()->route('home')->with(
-                'error',
-                'Transaksi tidak ditemukan atau gagal diproses oleh sistem
-pembayaran.'
-            );
+        if (in_array(
+            $midtransStatus->transaction_status,
+            ['capture', 'settlement']
+        )) {
+            $transaction->update([
+                'status' => 'success'
+            ]);
         }
+    } catch (\Exception $e) {
+        return redirect()->route('home')->with(
+            'error',
+            'Transaksi tidak ditemukan atau gagal diproses oleh sistem pembayaran.'
+        );
     }
+
+    return view('checkout.success', compact('transaction', 'categories'));
+}
 }

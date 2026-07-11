@@ -6,7 +6,7 @@
             class="inline-block w-full max-w-md rounded-3xl border border-slate-200 bg-white p-12 shadow-sm"
         >
             <div
-                class="roundedfull mx-auto mb-6 flex h-24 w-24 items-center justify-center bg-green-100 text-green-500"
+                class="rounded-full mx-auto mb-6 flex h-24 w-24 items-center justify-center bg-green-100 text-green-500"
             >
                 <svg class="h-12 w-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path

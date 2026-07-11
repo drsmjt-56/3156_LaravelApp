@@ -11,8 +11,19 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        //
+
+        $middleware->alias([
+            'admin' => \App\Http\Middleware\IsAdmin::class,
+        ]);
+
     })
+
+    ->withMiddleware(function (Middleware $middleware) {
+ // Mengecualikan route webhook Midtrans dari blokir CSRF
+ $middleware->validateCsrfTokens(except: [
+ '/midtrans/callback',
+ ]);
+})
     ->withExceptions(function (Exceptions $exceptions) {
         //
     })->create();
