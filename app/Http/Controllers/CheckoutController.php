@@ -10,13 +10,23 @@ use Illuminate\Http\Request;
 
 class CheckoutController extends Controller
 {
-    public function create(Event $event)
-    {
-        //Mengambil daftar kategori untuk keperluan menu footer
-        $categories = \App\Models\Category::all();
+   public function create(Event $event)
+{
+    // Jika belum login, arahkan ke halaman Continue with Google
+    if (!auth()->check()) {
 
-        return view('checkout.create', compact('event', 'categories'));
+        session([
+            'checkout_event_id' => $event->id
+        ]);
+
+        return redirect()->route('user.login');
     }
+
+    // Mengambil daftar kategori untuk keperluan menu footer
+    $categories = \App\Models\Category::all();
+
+    return view('checkout.create', compact('event', 'categories'));
+}
 
     public function store(Request $request, Event $event)
     {
