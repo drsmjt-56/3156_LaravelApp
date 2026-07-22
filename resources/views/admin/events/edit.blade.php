@@ -44,16 +44,35 @@
                     <label class="mb-3 block font-bold text-slate-700">
                         Kategori
                     </label>
+
                     <select name="category_id"
                         class="w-full rounded-2xl border border-slate-200 px-5 py-4 focus:border-indigo-500 focus:outline-none">
 
                         @foreach ($categories as $category)
                             <option value="{{ $category->id }}"
                                 {{ $event->category_id == $category->id ? 'selected' : '' }}>
-
                                 {{ $category->name }}
                             </option>
                         @endforeach
+
+                    </select>
+                </div>
+
+                <!-- PARTNER -->
+                <div>
+                    <label class="mb-3 block font-bold text-slate-700">
+                        Penyelenggara
+                    </label>
+
+                    <select name="partner_id"
+                        class="w-full rounded-2xl border border-slate-200 px-5 py-4 focus:border-indigo-500 focus:outline-none">
+
+                        @foreach ($partners as $partner)
+                            <option value="{{ $partner->id }}" {{ $event->partner_id == $partner->id ? 'selected' : '' }}>
+                                {{ $partner->name }}
+                            </option>
+                        @endforeach
+
                     </select>
                 </div>
 
@@ -67,14 +86,25 @@
                         class="w-full rounded-2xl border border-slate-200 px-5 py-4 focus:border-indigo-500 focus:outline-none">{{ old('description', $event->description) }}</textarea>
                 </div>
 
-                <!-- DATE -->
+                <!-- START DATE -->
                 <div>
                     <label class="mb-3 block font-bold text-slate-700">
-                        Tanggal Event
+                        Tanggal Mulai Event
                     </label>
 
                     <input type="datetime-local" name="date"
                         value="{{ \Carbon\Carbon::parse($event->date)->format('Y-m-d\TH:i') }}"
+                        class="w-full rounded-2xl border border-slate-200 px-5 py-4 focus:border-indigo-500 focus:outline-none">
+                </div>
+
+                <!-- END DATE -->
+                <div>
+                    <label class="mb-3 block font-bold text-slate-700">
+                        Tanggal Selesai Event
+                    </label>
+
+                    <input type="datetime-local" name="end_date"
+                        value="{{ old('end_date', $event->end_date ? \Carbon\Carbon::parse($event->end_date)->format('Y-m-d\TH:i') : '') }}"
                         class="w-full rounded-2xl border border-slate-200 px-5 py-4 focus:border-indigo-500 focus:outline-none">
                 </div>
 
@@ -127,10 +157,8 @@
                     </label>
 
                     @if ($event->poster_path)
-                        <img 
-                        src="{{ asset('storage/' . $event->poster_path) }}" 
-                        alt="{{ $event->title }}"
-                        class="mb-4 h-40 rounded-2xl object-cover">
+                        <img src="{{ asset('storage/' . $event->poster_path) }}" alt="{{ $event->title }}"
+                            class="mb-4 h-40 rounded-2xl object-cover">
                     @endif
 
                     <input type="file" name="poster"

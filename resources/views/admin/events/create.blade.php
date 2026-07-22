@@ -42,16 +42,38 @@
                     <label class="mb-3 block font-bold text-slate-700">
                         Kategori
                     </label>
+
                     <select name="category_id"
                         class="w-full rounded-2xl border border-slate-200 px-5 py-4 focus:border-indigo-500 focus:outline-none">
-                        <option value="">
-                            -- Pilih Kategori --
-                        </option>
+
+                        <option value="">-- Pilih Kategori --</option>
+
                         @foreach ($categories as $category)
-                            <option value="{{ $category->id }}">
+                            <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>
                                 {{ $category->name }}
                             </option>
                         @endforeach
+
+                    </select>
+                </div>
+
+                <!-- PARTNER -->
+                <div>
+                    <label class="mb-3 block font-bold text-slate-700">
+                        Penyelenggara
+                    </label>
+
+                    <select name="partner_id"
+                        class="w-full rounded-2xl border border-slate-200 px-5 py-4 focus:border-indigo-500 focus:outline-none">
+
+                        <option value="">-- Pilih Penyelenggara --</option>
+
+                        @foreach ($partners as $partner)
+                            <option value="{{ $partner->id }}" {{ old('partner_id') == $partner->id ? 'selected' : '' }}>
+                                {{ $partner->name }}
+                            </option>
+                        @endforeach
+
                     </select>
                 </div>
 
@@ -65,12 +87,23 @@
                         class="w-full rounded-2xl border border-slate-200 px-5 py-4 focus:border-indigo-500 focus:outline-none">{{ old('description') }}</textarea>
                 </div>
 
-                <!-- DATE -->
+                <!-- START DATE -->
                 <div>
                     <label class="mb-3 block font-bold text-slate-700">
-                        Tanggal Event
+                        Tanggal Mulai Event
                     </label>
+
                     <input type="datetime-local" name="date" value="{{ old('date') }}"
+                        class="w-full rounded-2xl border border-slate-200 px-5 py-4 focus:border-indigo-500 focus:outline-none">
+                </div>
+
+                <!-- END DATE -->
+                <div>
+                    <label class="mb-3 block font-bold text-slate-700">
+                        Tanggal Selesai Event
+                    </label>
+
+                    <input type="datetime-local" name="end_date" value="{{ old('end_date') }}"
                         class="w-full rounded-2xl border border-slate-200 px-5 py-4 focus:border-indigo-500 focus:outline-none">
                 </div>
 

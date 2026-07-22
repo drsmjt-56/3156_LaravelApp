@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Controller;
 use App\Models\Event;
+use App\Models\Partner;
 use Illuminate\Http\Request;
 
 class EventController extends Controller
@@ -19,16 +20,19 @@ class EventController extends Controller
     public function create()
     {
         $categories = \App\Models\Category::all();
-        return view ('admin.events.create', compact('categories'));
+        $partners = Partner::all();
+        return view ('admin.events.create', compact('categories', 'partners'));
     }
 
     public function store(Request $request)
     {
         $data = $request->validate([
             'category_id' => 'required|exists:categories,id',
+            'partner_id' => 'required|exists:partners,id',
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
             'date' => 'required|date',
+            'end_date' => 'required|date|after_or_equal:date',
             'location' => 'required|string|max:255',
             'price' => 'required|numeric|min:0',
             'stock' => 'required|numeric|min:1',
@@ -59,8 +63,10 @@ class EventController extends Controller
     public function edit(Event $event)
     {
         $categories = \App\Models\Category::all();
+        $partners = Partner::all();
+
         return view('admin.events.edit', compact('event',
-        'categories'));
+        'categories', 'partners'));
     }
 
    
@@ -69,9 +75,11 @@ class EventController extends Controller
 
     $data = $request->validate([
         'category_id' => 'required|exists:categories,id',
+        'partner_id' => 'required|exists:partners,id',
         'title' => 'required|string|max:255',
         'description' => 'nullable|string',
         'date' => 'required|date',
+        'end_date' => 'required|date|after_or_equal:date',
         'location' => 'required|string|max:255',
         'price' => 'required|numeric|min:0',
         'stock' => 'required|numeric|min:1',
