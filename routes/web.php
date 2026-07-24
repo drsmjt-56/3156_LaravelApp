@@ -10,16 +10,22 @@ use App\Http\Controllers\Admin\PartnerController;
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\TransactionController;
 use App\Http\Controllers\GoogleController;
+use App\Http\Controllers\ReviewController;
+use Illuminate\Support\Facades\Auth;
 
 // Rute User Area
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/events/{event}', [EventController::class, 'show'])->name('events.show');
 Route::get('/checkout', [EventController::class, 'checkout'])->name('checkout');
-Route::get('/my-ticket', [EventController::class, 'ticket'])->name('ticket');
+Route::get('/my-ticket', [HomeController::class, 'ticket'])
+->name('ticket');
 
 Route::get('/login', function () {
     return view('auth.user-login');
 })->name('user.login');
+
+Route::get('/partners/{partner}', [App\Http\Controllers\PartnerController::class, 'show'])
+->name('partners.show');
 
 // ======================
 // LOGIN GOOGLE (USER)
@@ -27,6 +33,19 @@ Route::get('/login', function () {
 Route::get('/auth/google', [GoogleController::class, 'redirect'])->name('google.login');
 Route::get('/auth/google/callback', [GoogleController::class, 'callback']);
 
+Route::post('/logout', function () {
+    Auth::logout();
+    request()->session()->invalidate();
+    request()->session()->regenerateToken();
+
+    return redirect()->route('home');
+})->name('logout');
+
+//REVIEW
+//Route::middleware('auth')->group(function () {
+    Route::get('/review/{transaction}', [ReviewController::class, 'create'])->name('review.create');
+    Route::post('/review/{transaction}', [ReviewController::class, 'store'])->name('review.store');
+//}); 
 
 //Checkout
 Route::get('/checkout/{event}', [App\Http\Controllers\CheckoutController::class, 'create'])->name('checkout.create');
@@ -48,7 +67,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
     //harus login dulu
-    Route::middleware(['auth'])->group(function () {
+    Route::middleware(['auth', 'admin'])->group(function () {
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
         Route::resource('events', EventController::class);
         Route::get('transactions', [\App\Http\Controllers\Admin\TransactionController::class, 'index'])->name('transactions.index');

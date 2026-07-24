@@ -49,6 +49,7 @@ class CheckoutController extends Controller
         //4. Merekam Transaksi ke Database
         $transaction = Transaction::create([
             'event_id' => $event->id,
+            'user_id' => auth()->id(),
             'order_id' => $orderId,
             'customer_name' => $request->customer_name,
             'customer_email' => $request->customer_email,

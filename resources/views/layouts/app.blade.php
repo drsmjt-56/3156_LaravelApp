@@ -23,25 +23,82 @@
 <body class="bg-slate-50 text-slate-900">
 
     <!-- Navigation -->
-    <nav
-        class="glass sticky top-8 z-40 mx-4 mt-4 px-6 py-4 rounded-2xl border border-white/20 shadow-lg flex justify-between items-center">
-        <div class="flex items-center gap-2">
-            <div
-                class="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center text-white font-bold text-xl">
-                AH</div>
-            <span class="text-xl font-bold tracking-tight">AmikomEventHub</span>
+<nav class="glass sticky top-8 z-40 mx-4 mt-4 rounded-2xl border border-white/20 shadow-lg">
+
+    <div class="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
+
+        <!-- Logo -->
+        <a href="{{ route('home') }}" class="flex items-center gap-2">
+
+            <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-indigo-600 text-xl font-bold text-white">
+                AH
+            </div>
+
+            <span class="text-xl font-bold tracking-tight">
+                AmikomEventHub
+            </span>
+
+        </a>
+
+        <!-- Menu -->
+        <div class="hidden items-center gap-8 font-medium md:flex">
+
+            <a href="{{ route('home') }}"
+                class="transition hover:text-indigo-600">
+                Home
+            </a>
+
+            <a href="#event"
+                class="transition hover:text-indigo-600">
+                Event
+            </a>
+
+            <a href="#partner"
+                class="transition hover:text-indigo-600">
+                Penyelenggara
+            </a>
+
         </div>
-        <div class="hidden md:flex gap-8 font-medium">
-            <a href="#" class="text-indigo-600">Jelajahi</a>
-            <a href="#" class="hover:text-indigo-600 transition">Kategori</a>
-            <a href="#" class="hover:text-indigo-600 transition">Tentang Kami</a>
-        </div>
-        <!-- <div class="flex gap-3">
-            <button class="px-5 py-2.5 rounded-xl font-semibold hover:bg-slate-200 transition">Login</button>
+
+        <!-- Right Menu -->
+<div class="flex items-center gap-3">
+
+    @auth
+
+        <span class="hidden md:block text-sm text-slate-500">
+            Halo,
+            <span class="font-semibold">
+                {{ Auth::user()->name }}
+            </span>
+        </span>
+
+        <a href="{{ route('ticket') }}"
+            class="rounded-xl px-4 py-2 font-semibold hover:bg-slate-100 transition">
+            My Ticket
+        </a>
+
+        <form action="{{ route('logout') }}" method="POST">
+            @csrf
             <button
-                class="px-5 py-2.5 bg-indigo-600 text-white rounded-xl font-semibold shadow-lg shadow-indigo-200 hover:bg-indigo-700 transition">Daftar</button>
-        </div> -->
-    </nav>
+                class="rounded-xl bg-red-500 px-5 py-2 text-white hover:bg-red-600 transition">
+                Logout
+            </button>
+        </form>
+
+    @else
+
+        <a href="{{ route('user.login') }}"
+    class="rounded-xl bg-indigo-600 px-5 py-2 text-white hover:bg-indigo-700 transition">
+    Login
+</a>
+
+    @endauth
+
+</div>
+
+    </div>
+
+</nav>
 
     @yield('content')
 

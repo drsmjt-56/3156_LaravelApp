@@ -150,5 +150,8 @@
                 </table>
             </div>
         </div>
+        <div class="mt-8 flex justify-center">
+    {{ $events->links() }}
+</div>
     </main>
 @endsection

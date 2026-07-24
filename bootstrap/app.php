@@ -10,20 +10,33 @@ return Application::configure(basePath: dirname(__DIR__))
         commands: __DIR__.'/../routes/console.php',
         health: '/up',
     )
+
     ->withMiddleware(function (Middleware $middleware) {
 
+        // Alias Middleware
         $middleware->alias([
             'admin' => \App\Http\Middleware\IsAdmin::class,
         ]);
 
+        // Redirect jika belum login
+        $middleware->redirectGuestsTo(function ($request) {
+
+            // Jika mengakses halaman admin
+            if ($request->is('admin') || $request->is('admin/*')) {
+                return route('admin.login');
+            }
+
+            // Selain admin diarahkan ke login user
+            return route('user.login');
+        });
+
+        // Mengecualikan webhook Midtrans dari CSRF
+        $middleware->validateCsrfTokens(except: [
+            '/midtrans/callback',
+        ]);
+
     })
 
-    ->withMiddleware(function (Middleware $middleware) {
- // Mengecualikan route webhook Midtrans dari blokir CSRF
- $middleware->validateCsrfTokens(except: [
- '/midtrans/callback',
- ]);
-})
     ->withExceptions(function (Exceptions $exceptions) {
         //
     })->create();

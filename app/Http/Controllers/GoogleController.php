@@ -45,7 +45,7 @@ class GoogleController extends Controller
 
         Auth::login($user);
 
-
+        
 if (session()->has('checkout_event_id')) {
 
     $eventId = session('checkout_event_id');

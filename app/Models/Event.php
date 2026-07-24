@@ -24,6 +24,11 @@ class Event extends Model
     }
 
     public function partner() {
-        return $this->belongsTo(Partner::class);
+        return $this->belongsTo(\App\Models\Partner::class);
     }
+
+    public function transactions()
+{
+    return $this->hasMany(Transaction::class);
+}
 }

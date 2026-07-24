@@ -9,6 +9,7 @@ use App\Models\Transaction;
 class DashboardController extends Controller
 {
     public function index() {
+        
         //1. Menjumlahkan semua nominal total_price dari kolom Transaksi Lunas
         $totalRevenue = Transaction::whereIn('status', ['settlement', 'success'])->sum('total_price');
 

@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\Event;
 use App\Models\Category;
 use App\Models\Partner;
+use App\Models\Transaction;
+use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
@@ -26,4 +28,25 @@ class HomeController extends Controller
     $events = $query->get();
     return view('welcome', compact('events', 'categories', 'partners'));
     }
+
+    public function ticket()
+{
+    if (!auth()->check()) {
+
+        session([
+            'redirect_after_login' => route('ticket')
+        ]);
+
+        return redirect()->route('user.login');
+    }
+
+    $transactions = Transaction::with('event', 'review')
+        ->where('user_id', auth()->id())
+        ->latest()
+        ->get();
+
+    //dd($transactions->toArray());
+
+    return view('my-ticket', compact('transactions'));
+}
 }
