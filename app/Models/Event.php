@@ -6,9 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Event extends Model
 {
-    protected $fillable = [
+   protected $fillable = [
     'category_id',
     'partner_id',
+    'organization_id',
     'title',
     'description',
     'date',
@@ -30,5 +31,10 @@ class Event extends Model
     public function transactions()
 {
     return $this->hasMany(Transaction::class);
+}
+
+public function organization()
+{
+    return $this->belongsTo(Organization::class);
 }
 }
