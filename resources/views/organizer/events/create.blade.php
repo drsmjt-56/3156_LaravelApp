@@ -45,23 +45,17 @@
                     </select>
                 </div>
 
-                {{-- Partner --}}
-                <div>
-                    <label class="font-semibold">Partner</label>
+           <div>
+    <label class="font-semibold">
+        Penyelenggara
+    </label>
 
-                    <select name="partner_id"
-                        class="w-full border rounded-xl p-3 mt-2">
-
-                        @foreach($partners as $partner)
-
-                        <option value="{{ $partner->id }}">
-                            {{ $partner->name }}
-                        </option>
-
-                        @endforeach
-
-                    </select>
-                </div>
+    <input
+        type="text"
+        value="{{ auth()->user()->organization->name }}"
+        class="w-full border rounded-xl p-3 mt-2 bg-gray-100"
+        readonly>
+</div>
 
                 {{-- Judul --}}
                 <div class="col-span-2">

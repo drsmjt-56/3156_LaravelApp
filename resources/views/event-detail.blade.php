@@ -22,10 +22,10 @@
                 alt="{{ $event->title }}"
                 class="w-full rounded-[2.5rem] border-8 border-white object-cover aspect-[3/4] shadow-2xl">
 
-            @if($event->partner)
+            @if($event->organization)
 
                 <a
-                    href="{{ route('partners.show', $event->partner->id) }}"
+                    href="{{ route('organizations.show', $event->organization->id) }}"
                     class="mt-8 block rounded-3xl border border-slate-100 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-lg">
 
                     <h4 class="mb-4 font-bold">
@@ -35,19 +35,17 @@
                     <div class="flex items-center gap-4">
 
                         <div class="flex h-12 w-12 items-center justify-center rounded-full bg-indigo-100 font-bold text-indigo-600">
-
-                            {{ strtoupper(substr($event->partner->name,0,2)) }}
-
+                            {{ strtoupper(substr($event->organization->name,0,2)) }}
                         </div>
 
                         <div>
 
                             <p class="font-bold text-slate-800">
-                                {{ $event->partner->name }}
+                                {{ $event->organization->name }}
                             </p>
 
                             <p class="text-xs text-slate-500">
-                                Lihat profil penyelenggara →
+                                Lihat Profil Penyelenggara →
                             </p>
 
                         </div>
@@ -82,9 +80,7 @@
         <div class="space-y-4">
 
             <span class="rounded-full bg-indigo-100 px-4 py-1.5 text-sm font-bold uppercase tracking-wider text-indigo-700">
-
                 {{ $event->category->name ?? 'Tanpa Kategori' }}
-
             </span>
 
             <h1 class="text-4xl md:text-5xl font-black leading-tight">
@@ -101,9 +97,7 @@
                     </svg>
 
                     <span>
-
                         {{ \Carbon\Carbon::parse($event->date)->format('d F Y H:i') }}
-
                     </span>
 
                 </div>
@@ -132,9 +126,7 @@
             </h3>
 
             <p class="text-lg leading-relaxed text-slate-600">
-
                 {{ $event->description }}
-
             </p>
 
         </div>
@@ -150,27 +142,19 @@
                     </p>
 
                     <h2 class="text-5xl font-black">
-
                         Rp {{ number_format($event->price,0,',','.') }}
 
                         <span class="text-lg font-medium text-indigo-200">
                             / orang
                         </span>
-
                     </h2>
 
                     <p class="mt-4 text-indigo-100">
-
                         Sisa stok :
-
                         <span class="font-bold">
-
                             {{ $event->stock }}
-
                         </span>
-
                         tiket
-
                     </p>
 
                 </div>
@@ -186,7 +170,6 @@
             </div>
 
             <div class="absolute -bottom-20 -right-20 h-64 w-64 rounded-full bg-white opacity-10"></div>
-
             <div class="absolute -left-10 -top-10 h-32 w-32 rounded-full bg-indigo-400 opacity-20"></div>
 
         </div>
@@ -200,9 +183,7 @@
             <ul class="space-y-3 text-slate-600">
 
                 <li>✔ E-ticket dikirim otomatis setelah pembayaran berhasil.</li>
-
                 <li>✔ Tiket dapat digunakan saat check-in acara.</li>
-
                 <li class="text-rose-500">
                     ✘ Tiket yang sudah dibeli tidak dapat direfund.
                 </li>
