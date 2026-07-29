@@ -44,7 +44,9 @@ class CheckoutController extends Controller
 
         //3. Generate Kode TRX (Unik)
         $orderId = 'TRX-' . time() . '-' . Str::random(5);
-        $totalPrice = $event->price + 5000;
+        $totalPrice = $event->price == 0
+    ? 0
+    : $event->price + 5000;
 
         //4. Merekam Transaksi ke Database
         $transaction = Transaction::create([
@@ -57,6 +59,44 @@ class CheckoutController extends Controller
             'total_price' => $totalPrice,
             'status' => 'Pending', //Status Awal
         ]);
+
+        // ======================================
+// BYPASS MIDTRANS UNTUK EVENT GRATIS
+// ======================================
+if ($event->price == 0) {
+
+    // Langsung ubah status menjadi sukses
+    $transaction->update([
+        'status' => 'success',
+    ]);
+
+    // Kurangi stok event
+    $event->decrement('stock');
+
+    // Kirim E-Ticket
+    try {
+
+        \Illuminate\Support\Facades\Mail::to(
+            $transaction->customer_email
+        )->send(
+            new \App\Mail\EventTicketMail($transaction)
+        );
+
+    } catch (\Exception $e) {
+
+        \Log::error(
+            'Gagal mengirim E-Ticket Free Event: ' .
+            $e->getMessage()
+        );
+
+    }
+
+    // Langsung ke halaman sukses
+    return redirect()->route(
+        'checkout.success',
+        $transaction->order_id
+    );
+}
 
         // --- INTEGRASI SNAP MIDTRANS ---
         // Konfigurasi Kredensial Environment Midtrans
@@ -106,6 +146,16 @@ class CheckoutController extends Controller
  $categories = \App\Models\Category::all();
  $transaction = Transaction::with('event')->where('order_id',
 $order_id)->firstOrFail();
+
+// Jika event gratis, tidak perlu cek Midtrans
+if ($transaction->event->price == 0) {
+
+    return view(
+        'checkout.success',
+        compact('transaction', 'categories')
+    );
+
+}
 
  // Konfigurasi Midtrans untuk mengecek status transaksi langsung ke API
  \Midtrans\Config::$serverKey = env('MIDTRANS_SERVER_KEY');

@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\TransactionController;
 use App\Http\Controllers\GoogleController;
 use App\Http\Controllers\ReviewController;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\CertificateController;
 
 // Rute User Area
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -47,6 +48,14 @@ Route::post('/logout', function () {
     Route::post('/review/{transaction}', [ReviewController::class, 'store'])->name('review.store');
 //}); 
 
+//CERTIFICATE
+Route::get('/certificate/{transaction}/send', [CertificateController::class, 'send'])
+    ->name('certificate.send');
+
+Route::get('/certificate/{transaction}', [CertificateController::class, 'preview'])
+    ->name('certificate.preview');
+
+
 //Checkout
 Route::get('/checkout/{event}', [App\Http\Controllers\CheckoutController::class, 'create'])->name('checkout.create');
 Route::post('checkout/{event}', [App\Http\Controllers\CheckoutController::class, 'store'])->name('checkout.store');
@@ -70,6 +79,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::middleware(['auth', 'admin'])->group(function () {
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
         Route::resource('events', EventController::class);
+        Route::post('/events/{event}/certificate',
+        [App\Http\Controllers\Admin\EventController::class, 'sendCertificate'])
+        ->name('events.certificate');
         Route::get('transactions', [\App\Http\Controllers\Admin\TransactionController::class, 'index'])->name('transactions.index');
 
         

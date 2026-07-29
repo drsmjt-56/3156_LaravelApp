@@ -1,80 +1,266 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>E-Ticket - AmikomEventHub</title>
+    <title>E-Ticket - Amikom Event Hub</title>
+
     <style>
-        body { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; background-color: #4f46e5; margin: 0; padding: 40px 20px; color: #ffffff; }
-        .container { max-width: 450px; margin: 0 auto; width: 100%; }
-        .header-text { text-align: center; margin-bottom: 30px; }
-        .header-text h1 { font-size: 28px; font-weight: 900; margin: 0 0 10px 0; }
-        .header-text p { color: #e0e7ff; margin: 0; }
-        .ticket-card { background-color: #ffffff; color: #0f172a; border-radius: 30px; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
-        .ticket-top { background-color: #eef2ff; padding: 30px; text-align: center; border-bottom: 2px dashed #c7d2fe; }
-        .ticket-top p { color: #4f46e5; font-size: 12px; font-weight: bold; text-transform: uppercase; letter-spacing: 2px; margin: 0 0 10px 0; }
-        .ticket-top h2 { font-size: 24px; font-weight: 900; margin: 0; }
-        .ticket-body { padding: 30px; }
-        .grid { display: block; width: 100%; margin-bottom: 20px; }
-        .grid-item { display: inline-block; width: 45%; vertical-align: top; margin-bottom: 20px; }
-        .label { color: #94a3b8; font-size: 11px; font-weight: bold; text-transform: uppercase; margin: 0 0 5px 0; }
-        .value { font-weight: bold; font-size: 16px; margin: 0; }
-        .qr-section { background-color: #f8fafc; padding: 25px; border-radius: 20px; text-align: center; margin-top: 10px; }
-        .qr-container { background-color: white; padding: 15px; border-radius: 12px; display: inline-block; margin-bottom: 15px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.05); }
-        .footer { text-align: center; padding: 0 30px 30px 30px; color: #94a3b8; font-size: 12px; }
+        body {
+            font-family: Helvetica, Arial, sans-serif;
+            background: #4f46e5;
+            margin: 0;
+            padding: 40px 20px;
+            color: white;
+        }
+
+        .container {
+            max-width: 470px;
+            margin: auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 30px;
+            font-weight: bold;
+        }
+
+        .header p {
+            margin-top: 10px;
+            color: #dbeafe;
+        }
+
+        .ticket {
+            background: white;
+            color: #1e293b;
+            border-radius: 25px;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0,0,0,.25);
+        }
+
+        .ticket-top {
+            background: #eef2ff;
+            padding: 30px;
+            text-align: center;
+            border-bottom: 2px dashed #c7d2fe;
+        }
+
+        .ticket-top small {
+            color: #4f46e5;
+            font-weight: bold;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .ticket-top h2 {
+            margin-top: 10px;
+            margin-bottom: 0;
+            font-size: 25px;
+        }
+
+        .body {
+            padding: 30px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        td {
+            padding: 12px 0;
+            vertical-align: top;
+        }
+
+        .label {
+            color: #94a3b8;
+            font-size: 11px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .value {
+            font-weight: bold;
+            font-size: 15px;
+            color: #0f172a;
+        }
+
+        .status {
+            color: #16a34a;
+        }
+
+        .qr-box {
+            margin-top: 25px;
+            background: #f8fafc;
+            border-radius: 18px;
+            padding: 25px;
+            text-align: center;
+        }
+
+        .qr-box img {
+            background: white;
+            padding: 12px;
+            border-radius: 10px;
+        }
+
+        .scan-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #334155;
+        }
+
+        .scan-desc {
+            color: #64748b;
+            font-size: 13px;
+            margin-bottom: 18px;
+        }
+
+        .order-id {
+            margin-top: 15px;
+            font-family: monospace;
+            font-size: 15px;
+            font-weight: bold;
+            color: #0f172a;
+        }
+
+        .footer {
+            padding: 25px;
+            text-align: center;
+            font-size: 12px;
+            color: #64748b;
+        }
+
+        .footer p {
+            margin: 6px 0;
+        }
     </style>
 </head>
+
 <body>
-    <div class="container">
-        <!-- Success Banner -->
-        <div class="header-text">
-            <h1>Pembayaran Berhasil!</h1>
-            <p>Tiket Anda telah terbit dan siap digunakan.</p>
-        </div>
 
-        <!-- Ticket Card -->
-        <div class="ticket-card">
-            <!-- Ticket Header -->
-            <div class="ticket-top">
-                <p>E-Ticket Resmi</p>
-                <h2>{{ $transaction->event->title }}</h2>
-            </div>
+<div class="container">
 
-            <!-- Ticket Body -->
-            <div class="ticket-body">
-                <div class="grid">
-                    <div class="grid-item">
-                        <p class="label">Nama Pembeli</p>
-                        <p class="value">{{ $transaction->customer_name }}</p>
-                    </div>
-                    <div class="grid-item">
-                        <p class="label">Tanggal & Waktu</p>
-                        <p class="value">{{ \Carbon\Carbon::parse($transaction->event->date)->format('d M, H:i') }}</p>
-                    </div>
-                    <div class="grid-item">
-                        <p class="label">Order ID</p>
-                        <p class="value">{{ $transaction->order_id }}</p>
-                    </div>
-                    <div class="grid-item">
-                        <p class="label">Lokasi</p>
-                        <p class="value">{{ $transaction->event->location }}</p>
-                    </div>
-                </div>
-
-                <div class="qr-section">
-                    <p class="label" style="margin-bottom: 15px;">Scan QR untuk Check-in</p>
-                    <div class="qr-container">
-                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data={{ urlencode($transaction->order_id) }}" alt="QR Code" width="150" height="150" style="display: block;">
-                    </div>
-                    <p style="margin: 0; font-family: monospace; font-weight: bold; color: #1e293b;">{{ $transaction->order_id }}</p>
-                </div>
-            </div>
-
-            <div class="footer">
-                <p>Mohon tunjukkan E-Ticket ini saat memasuki area acara.</p>
-                <p style="margin-top: 10px;">&copy; {{ date('Y') }} AmikomEventHub.</p>
-            </div>
-        </div>
+    <div class="header">
+        <h1>🎉 Pembayaran Berhasil!</h1>
+        <p>E-Ticket Anda telah berhasil diterbitkan.</p>
     </div>
+
+    <div class="ticket">
+
+        <div class="ticket-top">
+            <small>Official E-Ticket</small>
+
+            <h2>
+                {{ $transaction->event->title }}
+            </h2>
+        </div>
+
+        <div class="body">
+
+            <table>
+
+                <tr>
+                    <td width="50%">
+                        <div class="label">Nama Peserta</div>
+
+                        <div class="value">
+                            {{ $transaction->customer_name }}
+                        </div>
+                    </td>
+
+                    <td>
+                        <div class="label">Status</div>
+
+                        <div class="value status">
+                            {{ ucfirst($transaction->status) }}
+                        </div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <div class="label">Tanggal Event</div>
+
+                        <div class="value">
+                            {{ \Carbon\Carbon::parse($transaction->event->date)->format('d M Y') }}
+                        </div>
+                    </td>
+
+                    <td>
+                        <div class="label">Waktu</div>
+
+                        <div class="value">
+                            {{ \Carbon\Carbon::parse($transaction->event->date)->format('H:i') }}
+                        </div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <div class="label">Lokasi</div>
+
+                        <div class="value">
+                            {{ $transaction->event->location }}
+                        </div>
+                    </td>
+
+                    <td>
+                        <div class="label">Order ID</div>
+
+                        <div class="value">
+                            {{ $transaction->order_id }}
+                        </div>
+                    </td>
+                </tr>
+
+            </table>
+
+            <div class="qr-box">
+
+                <div class="scan-title">
+                    Scan QR Code
+                </div>
+
+                <div class="scan-desc">
+                    Tunjukkan QR Code ini kepada panitia saat proses check-in.
+                </div>
+
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data={{ urlencode($transaction->order_id) }}"
+                    width="180">
+
+                <div class="order-id">
+                    {{ $transaction->order_id }}
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="footer">
+
+            <p>
+                Simpan E-Ticket ini hingga acara selesai.
+            </p>
+
+            <p>
+                QR Code hanya berlaku untuk satu peserta.
+            </p>
+
+            <p>
+                © {{ date('Y') }} Amikom Event Hub
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
 </body>
+
 </html>
