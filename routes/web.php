@@ -15,10 +15,14 @@ use App\Http\Controllers\ReviewController;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Organizer\DashboardController as OrganizerDashboardController;
 use App\Http\Controllers\Organizer\EventController as OrganizerEventController;
+use App\Http\Controllers\OrganizationController as UserOrganizationController;
+
 
 // Rute User Area
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/events/{event}', [EventController::class, 'show'])->name('events.show');
+Route::get('/organizations/{organization}', [UserOrganizationController::class, 'show'])
+    ->name('organizations.show');
 Route::get('/checkout', [EventController::class, 'checkout'])->name('checkout');
 Route::get('/my-ticket', [HomeController::class, 'ticket'])
 ->name('ticket');

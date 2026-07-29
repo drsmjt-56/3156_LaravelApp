@@ -24,53 +24,40 @@ class EventController extends Controller
         return view('organizer.events.index', compact('events'));
     }
 
-
     public function create()
     {
         $categories = Category::all();
-        $partners = Partner::all();
 
-        return view('organizer.events.create',
-        compact('categories','partners'));
+        return view('organizer.events.create', compact('categories'));
     }
-
 
     public function store(Request $request)
     {
-
         $data = $request->validate([
-            'category_id'=>'required',
-            'partner_id'=>'required',
-            'title'=>'required',
-            'description'=>'nullable',
-            'date'=>'required|date',
-            'end_date'=>'required|date',
-            'location'=>'required',
-            'price'=>'required|numeric',
-            'stock'=>'required|numeric',
-            'poster'=>'nullable|image'
+            'category_id' => 'required',
+            'title' => 'required',
+            'description' => 'nullable',
+            'date' => 'required|date',
+            'end_date' => 'required|date',
+            'location' => 'required',
+            'price' => 'required|numeric',
+            'stock' => 'required|numeric',
+            'poster' => 'nullable|image'
         ]);
 
+        $data['organization_id'] = Auth::user()->organization_id;
 
-        $data['organization_id'] =
-        Auth::user()->organization_id;
-
-
-        if($request->hasFile('poster')){
-            $data['poster_path'] =
-            $request->file('poster')
-            ->store('posters','public');
+        if ($request->hasFile('poster')) {
+            $data['poster_path'] = $request->file('poster')
+                ->store('posters', 'public');
         }
-
 
         Event::create($data);
 
-
         return redirect()
-        ->route('organizer.events.index')
-        ->with('success','Event berhasil dibuat');
+            ->route('organizer.events.index')
+            ->with('success', 'Event berhasil dibuat');
     }
-
 
     public function edit(Event $event)
     {
@@ -79,74 +66,59 @@ class EventController extends Controller
             403
         );
 
-
         $categories = Category::all();
-        $partners = Partner::all();
 
-
-        return view('organizer.events.edit',
-        compact(
-            'event',
-            'categories',
-            'partners'
-        ));
+        return view(
+            'organizer.events.edit',
+            compact(
+                'event',
+                'categories'
+            )
+        );
     }
-
-
 
     public function update(Request $request, Event $event)
     {
-
         abort_if(
             $event->organization_id != Auth::user()->organization_id,
             403
         );
 
+        $data = $request->validate([
+            'category_id' => 'required',
+            'title' => 'required',
+            'description' => 'nullable',
+            'date' => 'required|date',
+            'end_date' => 'required|date',
+            'location' => 'required',
+            'price' => 'required|numeric',
+            'stock' => 'required|numeric',
+            'poster' => 'nullable|image',
+        ]);
 
-       $data = $request->validate([
-    'category_id'=>'required',
-    'partner_id'=>'required',
-    'title'=>'required',
-    'description'=>'nullable',
-    'date'=>'required|date',
-    'end_date'=>'required|date',
-    'location'=>'required',
-    'price'=>'required|numeric',
-    'stock'=>'required|numeric',
-    'poster'=>'nullable|image', 
-]);
+        if ($request->hasFile('poster')) {
+            $data['poster_path'] = $request->file('poster')
+                ->store('posters', 'public');
+        }
 
-
-        // Jika organizer mengupload poster baru
-if ($request->hasFile('poster')) {
-
-    $data['poster_path'] = $request->file('poster')
-        ->store('posters', 'public');
-}
         $event->update($data);
 
-
         return redirect()
-        ->route('organizer.events.index')
-        ->with('success','Event diperbarui');
+            ->route('organizer.events.index')
+            ->with('success', 'Event diperbarui');
     }
-
-
 
     public function destroy(Event $event)
     {
-
         abort_if(
             $event->organization_id != Auth::user()->organization_id,
             403
         );
 
-
         $event->delete();
 
-
         return redirect()
-        ->route('organizer.events.index')
-        ->with('success','Event dihapus');
+            ->route('organizer.events.index')
+            ->with('success', 'Event dihapus');
     }
 }
