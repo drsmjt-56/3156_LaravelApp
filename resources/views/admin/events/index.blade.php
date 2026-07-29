@@ -117,6 +117,21 @@
                                             </svg>
                                         </a>
 
+                                        <!--CERTIFICATE-->
+                                        <form action="{{ route('admin.events.certificate', $event->id) }}" method="POST"
+                                            onsubmit="return confirm('Terbitkan E-Certificate? Pastikan acara telah selesai.')">
+
+                                            @csrf
+
+                                            <button type="submit"
+                                                class="rounded-xl bg-green-50 p-2.5 text-green-600 transition hover:bg-green-600 hover:text-white"
+                                                title="Terbitkan E-Certificate">
+                                                📜
+
+                                            </button>
+
+                                        </form>
+
                                         <!-- DELETE -->
                                         <form action="{{ route('admin.events.destroy', $event->id) }}" method="POST"
                                             onsubmit="return confirm('Anda yakin ingin menghapus event ini?')">
@@ -151,7 +166,7 @@
             </div>
         </div>
         <div class="mt-8 flex justify-center">
-    {{ $events->links() }}
-</div>
+            {{ $events->links() }}
+        </div>
     </main>
 @endsection

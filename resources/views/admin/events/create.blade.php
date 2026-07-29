@@ -87,31 +87,25 @@
                         class="w-full rounded-2xl border border-slate-200 px-5 py-4 focus:border-indigo-500 focus:outline-none">{{ old('description') }}</textarea>
                 </div>
 
-               <!-- START DATE -->
-<div>
-    <label class="mb-3 block font-bold text-slate-700">
-        Tanggal Mulai Event
-    </label>
+                <!-- START DATE -->
+                <div>
+                    <label class="mb-3 block font-bold text-slate-700">
+                        Tanggal Mulai Event
+                    </label>
 
-    <input
-        type="date"
-        name="date"
-        value="{{ old('date') }}"
-        class="w-full rounded-2xl border border-slate-200 px-5 py-4 focus:border-indigo-500 focus:outline-none">
-</div>
+                    <input type="date" name="date" value="{{ old('date') }}"
+                        class="w-full rounded-2xl border border-slate-200 px-5 py-4 focus:border-indigo-500 focus:outline-none">
+                </div>
 
-<!-- END DATE -->
-<div>
-    <label class="mb-3 block font-bold text-slate-700">
-        Tanggal Selesai Event
-    </label>
+                <!-- END DATE -->
+                <div>
+                    <label class="mb-3 block font-bold text-slate-700">
+                        Tanggal Selesai Event
+                    </label>
 
-    <input
-        type="date"
-        name="end_date"
-        value="{{ old('end_date') }}"
-        class="w-full rounded-2xl border border-slate-200 px-5 py-4 focus:border-indigo-500 focus:outline-none">
-</div>
+                    <input type="date" name="end_date" value="{{ old('end_date') }}"
+                        class="w-full rounded-2xl border border-slate-200 px-5 py-4 focus:border-indigo-500 focus:outline-none">
+                </div>
 
                 <!-- LOCATION -->
                 <div>
@@ -128,7 +122,18 @@
                         Harga Tiket
                     </label>
 
-                    <input type="number" name="price" value="{{ old('price') }}" placeholder="Contoh : 50000"
+                    <div class="mb-4">
+                        <label class="flex items-center gap-2 cursor-pointer">
+                            <input type="checkbox" id="is_free">
+
+                            <span class="font-medium text-green-600">
+                                Event Gratis
+                            </span>
+                        </label>
+                    </div>
+
+                    <input type="number" id="price" name="price" value="{{ old('price') }}"
+                        placeholder="Contoh : 50000"
                         class="w-full rounded-2xl border border-slate-200 px-5 py-4 focus:border-indigo-500 focus:outline-none">
 
                     @error('price')
@@ -179,4 +184,30 @@
             </form>
         </div>
     </main>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+
+            const free = document.getElementById('is_free');
+            const price = document.getElementById('price');
+
+            free.addEventListener('change', function() {
+
+                if (this.checked) {
+
+                    price.value = 0;
+                    price.readOnly = true;
+                    price.classList.add('bg-gray-100');
+
+                } else {
+
+                    price.value = '';
+                    price.readOnly = false;
+                    price.classList.remove('bg-gray-100');
+
+                }
+
+            });
+
+        });
+    </script>
 @endsection

@@ -122,5 +122,3 @@ Route::prefix('organizer')
             ->name('analytics');
 
     });
-
-        

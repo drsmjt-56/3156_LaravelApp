@@ -124,7 +124,19 @@
                         Harga Tiket
                     </label>
 
-                    <input type="number" name="price" value="{{ old('price', $event->price) }}"
+                    <div class="mb-4">
+                        <label class="flex items-center gap-2 cursor-pointer">
+
+                            <input type="checkbox" id="is_free" {{ old('price', $event->price) == 0 ? 'checked' : '' }}>
+
+                            <span class="font-medium text-green-600">
+                                Event Gratis
+                            </span>
+
+                        </label>
+                    </div>
+
+                    <input type="number" id="price" name="price" value="{{ old('price', $event->price) }}"
                         class="w-full rounded-2xl border border-slate-200 px-5 py-4 focus:border-indigo-500 focus:outline-none">
 
                     @error('price')
@@ -180,5 +192,34 @@
             </form>
         </div>
     </main>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+
+            const free = document.getElementById('is_free');
+            const price = document.getElementById('price');
+
+            function togglePrice() {
+
+                if (free.checked) {
+
+                    price.value = 0;
+                    price.readOnly = true;
+                    price.classList.add('bg-gray-100');
+
+                } else {
+
+                    price.readOnly = false;
+                    price.classList.remove('bg-gray-100');
+
+                }
+
+            }
+
+            togglePrice();
+
+            free.addEventListener('change', togglePrice);
+
+        });
+    </script>
 
 @endsection
