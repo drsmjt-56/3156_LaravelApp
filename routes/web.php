@@ -117,6 +117,13 @@ Route::prefix('organizer')
         // Kelola Event Organizer
         Route::resource('events', OrganizerEventController::class);
 
+        // Route untuk kirim sertifikat
+        // ============================
+        Route::post(
+            'events/{event}/certificate',
+            [OrganizerEventController::class, 'sendCertificate']
+        )->name('events.certificate');
+
         // Analitik Pendapatan
         Route::get('/analytics', [OrganizerDashboardController::class, 'analytics'])
             ->name('analytics');

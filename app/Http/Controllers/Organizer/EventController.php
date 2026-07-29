@@ -6,6 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Models\Event;
 use App\Models\Partner;
 use App\Models\Category;
+use App\Models\Transaction;
+use App\Mail\CertificateMail;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -149,4 +152,31 @@ if ($request->hasFile('poster')) {
         ->route('organizer.events.index')
         ->with('success','Event dihapus');
     }
+
+    public function sendCertificate(Event $event)
+{
+    abort_if(
+        $event->organization_id != Auth::user()->organization_id,
+        403
+    );
+
+    $transactions = Transaction::where('event_id', $event->id)
+        ->whereIn('status', ['success', 'Success', 'settlement'])
+        ->get();
+
+    foreach ($transactions as $transaction) {
+
+        Mail::to($transaction->customer_email)
+            ->send(new CertificateMail($transaction));
+
+        sleep(1);
+    }
+
+    return redirect()
+        ->route('organizer.events.index')
+        ->with(
+            'success',
+            'E-Certificate berhasil dikirim kepada seluruh peserta.'
+        );
+}
 }

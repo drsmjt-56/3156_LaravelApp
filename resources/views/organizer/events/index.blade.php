@@ -5,194 +5,198 @@
 
 @section('content')
 
-<div class="flex-1 p-10">
+    <div class="flex-1 p-10">
 
-    <div class="flex justify-between items-center mb-8">
+        <div class="flex justify-between items-center mb-8">
 
-        <div>
-            <h1 class="text-3xl font-bold">
-                Kelola Event
-            </h1>
+            <div>
+                <h1 class="text-3xl font-bold">
+                    Kelola Event
+                </h1>
 
-            <p class="text-slate-500 mt-1">
-                Daftar event milik organisasi Anda
-            </p>
-        </div>
+                <p class="text-slate-500 mt-1">
+                    Daftar event milik organisasi Anda
+                </p>
+            </div>
 
-        <a href="{{ route('organizer.events.create') }}"
-            class="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-3 rounded-xl font-semibold">
+            <a href="{{ route('organizer.events.create') }}"
+                class="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-3 rounded-xl font-semibold">
 
-            + Tambah Event
+                + Tambah Event
 
-        </a>
-
-    </div>
-
-
-    @if(session('success'))
-
-        <div class="bg-green-100 text-green-700 p-4 rounded-xl mb-6">
-
-            {{ session('success') }}
+            </a>
 
         </div>
 
-    @endif
 
+        @if (session('success'))
+            <div class="bg-green-100 text-green-700 p-4 rounded-xl mb-6">
 
+                {{ session('success') }}
 
-    <div class="bg-white rounded-2xl shadow overflow-hidden">
+            </div>
+        @endif
 
-        <table class="w-full">
 
-            <thead class="bg-slate-100">
 
-                <tr>
+        <div class="bg-white rounded-2xl shadow overflow-hidden">
 
-                    <th class="px-6 py-4 text-left">
-                        Poster
-                    </th>
+            <table class="w-full">
 
-                    <th class="px-6 py-4 text-left">
-                        Event
-                    </th>
+                <thead class="bg-slate-100">
 
-                    <th class="px-6 py-4 text-left">
-                        Tanggal
-                    </th>
+                    <tr>
 
-                    <th class="px-6 py-4 text-left">
-                        Lokasi
-                    </th>
+                        <th class="px-6 py-4 text-left">
+                            Poster
+                        </th>
 
-                    <th class="px-6 py-4 text-left">
-                        Harga
-                    </th>
+                        <th class="px-6 py-4 text-left">
+                            Event
+                        </th>
 
-                    <th class="px-6 py-4 text-center">
-                        Aksi
-                    </th>
+                        <th class="px-6 py-4 text-left">
+                            Tanggal
+                        </th>
 
-                </tr>
+                        <th class="px-6 py-4 text-left">
+                            Lokasi
+                        </th>
 
-            </thead>
+                        <th class="px-6 py-4 text-left">
+                            Harga
+                        </th>
 
-            <tbody>
+                        <th class="px-6 py-4 text-center">
+                            Aksi
+                        </th>
 
-                @forelse($events as $event)
+                    </tr>
 
-                <tr class="border-t">
+                </thead>
 
-                    <td class="px-6 py-4">
+                <tbody>
 
-                        @if($event->poster_path)
+                    @forelse($events as $event)
+                        <tr class="border-t">
 
-                            <img src="{{ asset('storage/'.$event->poster_path) }}"
-                                class="w-20 rounded-lg">
+                            <td class="px-6 py-4">
 
-                        @else
+                                @if ($event->poster_path)
+                                    <img src="{{ asset('storage/' . $event->poster_path) }}" class="w-20 rounded-lg">
+                                @else
+                                    -
+                                @endif
 
-                            -
+                            </td>
 
-                        @endif
+                            <td class="px-6 py-4">
 
-                    </td>
+                                <h4 class="font-bold">
 
-                    <td class="px-6 py-4">
+                                    {{ $event->title }}
 
-                        <h4 class="font-bold">
+                                </h4>
 
-                            {{ $event->title }}
+                                <p class="text-sm text-slate-500">
 
-                        </h4>
+                                    {{ $event->category->name }}
 
-                        <p class="text-sm text-slate-500">
+                                </p>
 
-                            {{ $event->category->name }}
+                            </td>
 
-                        </p>
+                            <td class="px-6 py-4">
 
-                    </td>
+                                {{ \Carbon\Carbon::parse($event->date)->format('d M Y') }}
 
-                    <td class="px-6 py-4">
+                            </td>
 
-                        {{ \Carbon\Carbon::parse($event->date)->format('d M Y') }}
+                            <td class="px-6 py-4">
 
-                    </td>
+                                {{ $event->location }}
 
-                    <td class="px-6 py-4">
+                            </td>
 
-                        {{ $event->location }}
+                            <td class="px-6 py-4">
 
-                    </td>
+                                Rp {{ number_format($event->price, 0, ',', '.') }}
 
-                    <td class="px-6 py-4">
+                            </td>
 
-                        Rp {{ number_format($event->price,0,',','.') }}
+                            <td class="px-6 py-4">
 
-                    </td>
+                                <div class="flex justify-center gap-2">
 
-                    <td class="px-6 py-4">
+                                    <!-- Edit -->
+                                    <a href="{{ route('organizer.events.edit', $event->id) }}"
+                                        class="bg-yellow-400 text-white px-4 py-2 rounded-lg">
 
-                        <div class="flex justify-center gap-2">
+                                        Edit
 
-                            <a href="{{ route('organizer.events.edit',$event->id) }}"
-                                class="bg-yellow-400 text-white px-4 py-2 rounded-lg">
+                                    </a>
 
-                                Edit
+                                    <!-- Kirim Sertifikat -->
+                                    <form action="{{ route('organizer.events.certificate', $event->id) }}" method="POST"
+                                        onsubmit="return confirm('Terbitkan E-Certificate? Pastikan acara telah selesai.')">
 
-                            </a>
+                                        @csrf
 
-                            <form action="{{ route('organizer.events.destroy',$event->id) }}"
-                                method="POST">
+                                        <button class="bg-green-500 text-white px-4 py-2 rounded-lg">
 
-                                @csrf
-                                @method('DELETE')
+                                            Sertifikat
 
-                                <button
-                                    onclick="return confirm('Yakin hapus event?')"
-                                    class="bg-red-500 text-white px-4 py-2 rounded-lg">
+                                        </button>
 
-                                    Hapus
+                                    </form>
 
-                                </button>
+                                    <!-- Hapus -->
+                                    <form action="{{ route('organizer.events.destroy', $event->id) }}" method="POST">
 
-                            </form>
+                                        @csrf
+                                        @method('DELETE')
 
-                        </div>
+                                        <button onclick="return confirm('Yakin hapus event?')"
+                                            class="bg-red-500 text-white px-4 py-2 rounded-lg">
 
-                    </td>
+                                            Hapus
 
-                </tr>
+                                        </button>
 
-                @empty
+                                    </form>
 
-                <tr>
+                                </div>
 
-                    <td colspan="6"
-                        class="text-center py-8 text-slate-500">
+                            </td>
 
-                        Belum ada event.
+                        </tr>
 
-                    </td>
+                    @empty
 
-                </tr>
+                        <tr>
 
-                @endforelse
+                            <td colspan="6" class="text-center py-8 text-slate-500">
 
-            </tbody>
+                                Belum ada event.
 
-        </table>
+                            </td>
+
+                        </tr>
+                    @endforelse
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+        <div class="mt-6">
+
+            {{ $events->links() }}
+
+        </div>
 
     </div>
-
-
-    <div class="mt-6">
-
-        {{ $events->links() }}
-
-    </div>
-
-</div>
 
 @endsection
