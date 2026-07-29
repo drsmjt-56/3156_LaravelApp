@@ -7,14 +7,29 @@ use App\Http\Controllers\Controller;
 use App\Models\Event;
 use App\Models\Partner;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class EventController extends Controller
 {
     public function index()
-    {
-        $events = \App\Models\Event::with('category')->latest()->paginate(10);
-        return view('admin.events.index', compact('events'));
+{
+    if (Auth::user()->role == 'superadmin') {
+
+        $events = Event::with('category')
+            ->latest()
+            ->paginate(10);
+
+    } else {
+
+        $events = Event::with('category')
+            ->where('organization_id', Auth::user()->organization_id)
+            ->latest()
+            ->paginate(10);
+
     }
+
+    return view('admin.events.index', compact('events'));
+}
 
   
     public function create()

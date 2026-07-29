@@ -5,7 +5,7 @@
 
 <div class="space-y-10">
     <!-- Stats Grid -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6">
+   <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-6 gap-6">
         <!-- Total Pendapatan -->
         <div class="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm min-w-0">
             <div class="w-12 h-12 bg-indigo-50 text-indigo-600 rounded-2xl flex items-center justify-center mb-4">
@@ -111,6 +111,48 @@
                 {{ $pendingOrders }} Pesanan
             </h3>
         </div>
+
+        <!-- Total Organization -->
+<div class="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm min-w-0">
+    <div class="w-12 h-12 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center mb-4">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M3 7h18M5 7V5a2 2 0 012-2h10a2 2 0 012 2v2M5 7v12h14V7">
+            </path>
+        </svg>
+    </div>
+
+    <p class="text-slate-400 text-sm font-bold uppercase mb-1">
+        Total Organization
+    </p>
+
+    <h3 class="text-2xl font-black">
+        {{ $totalOrganizations }}
+    </h3>
+</div>
+
+<!-- Total Organizer -->
+<div class="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm min-w-0">
+    <div class="w-12 h-12 bg-purple-50 text-purple-600 rounded-2xl flex items-center justify-center mb-4">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M17 20h5V4H2v16h5m3-8a4 4 0 100-8 4 4 0 000 8zm8 8a4 4 0 00-8 0">
+            </path>
+        </svg>
+    </div>
+
+    <p class="text-slate-400 text-sm font-bold uppercase mb-1">
+        Total Organizer
+    </p>
+
+    <h3 class="text-2xl font-black">
+        {{ $totalOrganizers }}
+    </h3>
+</div>
     </div>
 
         <!-- Latest Sales Table -->

@@ -18,11 +18,24 @@ class AuthController extends Controller
             'password' => ['required'],
         ]);
 
-        if (Auth::attempt($credentials)) {
-            $request->session()->regenerate();
-            return redirect()->route('admin.dashboard');
-        }
+       if (Auth::attempt($credentials)) {
 
+    $request->session()->regenerate();
+
+    if (Auth::user()->role == 'superadmin') {
+        return redirect()->route('admin.dashboard');
+    }
+
+    if (Auth::user()->role == 'organizer') {
+        return redirect()->route('organizer.dashboard');
+    }
+
+    Auth::logout();
+
+    return back()->withErrors([
+        'email' => 'Akun ini tidak memiliki akses.',
+    ]);
+}
         return back()->withErrors([
             'email' => 'Email atau Password yang Anda berikan tidak terdaftar di rekam kami',
         ]);

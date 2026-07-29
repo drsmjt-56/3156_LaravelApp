@@ -22,6 +22,7 @@ class User extends Authenticatable
     'email',
     'password',
     'role',
+    'organization_id',
     'google_id',
     'avatar',
 ];
@@ -53,4 +54,10 @@ class User extends Authenticatable
     {
         return $this->hasMany(Transaction::class);
     }
+
+
+    public function organization()
+{
+    return $this->belongsTo(Organization::class);
+}
 }
