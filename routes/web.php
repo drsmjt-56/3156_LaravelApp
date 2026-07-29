@@ -9,10 +9,12 @@ use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\PartnerController;
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\TransactionController;
+use App\Http\Controllers\Admin\OrganizationController;
 use App\Http\Controllers\GoogleController;
 use App\Http\Controllers\ReviewController;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Controllers\CertificateController;
+use App\Http\Controllers\Organizer\DashboardController as OrganizerDashboardController;
+use App\Http\Controllers\Organizer\EventController as OrganizerEventController;
 
 // Rute User Area
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -48,14 +50,6 @@ Route::post('/logout', function () {
     Route::post('/review/{transaction}', [ReviewController::class, 'store'])->name('review.store');
 //}); 
 
-//CERTIFICATE
-Route::get('/certificate/{transaction}/send', [CertificateController::class, 'send'])
-    ->name('certificate.send');
-
-Route::get('/certificate/{transaction}', [CertificateController::class, 'preview'])
-    ->name('certificate.preview');
-
-
 //Checkout
 Route::get('/checkout/{event}', [App\Http\Controllers\CheckoutController::class, 'create'])->name('checkout.create');
 Route::post('checkout/{event}', [App\Http\Controllers\CheckoutController::class, 'store'])->name('checkout.store');
@@ -79,9 +73,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::middleware(['auth', 'admin'])->group(function () {
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
         Route::resource('events', EventController::class);
-        Route::post('/events/{event}/certificate',
-        [App\Http\Controllers\Admin\EventController::class, 'sendCertificate'])
-        ->name('events.certificate');
+        Route::resource('organizations', OrganizationController::class);
+        Route::patch('organizations/{organization}/approve',[OrganizationController::class, 'approve'])->name('organizations.approve');
         Route::get('transactions', [\App\Http\Controllers\Admin\TransactionController::class, 'index'])->name('transactions.index');
 
         
@@ -108,4 +101,24 @@ Route::prefix('admin')->name('admin.')->group(function () {
         ->name('partners.destroy');
         // dan seterusnya...
     });
+
 });
+
+//route organizer
+Route::prefix('organizer')
+    ->name('organizer.')
+    ->middleware(['auth', 'organizer'])
+    ->group(function () {
+
+        // Dashboard Organizer
+        Route::get('/dashboard', [OrganizerDashboardController::class, 'index'])
+            ->name('dashboard');
+
+        // Kelola Event Organizer
+        Route::resource('events', OrganizerEventController::class);
+
+        // Analitik Pendapatan
+        Route::get('/analytics', [OrganizerDashboardController::class, 'analytics'])
+            ->name('analytics');
+
+    });

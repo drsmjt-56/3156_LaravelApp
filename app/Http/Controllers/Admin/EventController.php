@@ -7,17 +7,29 @@ use App\Http\Controllers\Controller;
 use App\Models\Event;
 use App\Models\Partner;
 use Illuminate\Http\Request;
-use App\Models\Transaction;
-use App\Mail\CertificateMail;
-use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Auth;
 
 class EventController extends Controller
 {
     public function index()
-    {
-        $events = \App\Models\Event::with('category')->latest()->paginate(10);
-        return view('admin.events.index', compact('events'));
+{
+    if (Auth::user()->role == 'superadmin') {
+
+        $events = Event::with('category')
+            ->latest()
+            ->paginate(10);
+
+    } else {
+
+        $events = Event::with('category')
+            ->where('organization_id', Auth::user()->organization_id)
+            ->latest()
+            ->paginate(10);
+
     }
+
+    return view('admin.events.index', compact('events'));
+}
 
   
     public function create()
@@ -119,25 +131,4 @@ class EventController extends Controller
         ->route('admin.events.index')
         ->with('success', 'Data event berhasil dihapus.');
     }
-
-    public function sendCertificate($event)
-{
-    $transactions = Transaction::with('event')
-        ->where('event_id', $event)
-        ->whereIn('status', ['success', 'Success', 'settlement'])
-        ->get();
-
-    foreach ($transactions as $transaction) {
-
-    Mail::to($transaction->customer_email)
-        ->send(new CertificateMail($transaction));
-
-    sleep(1);
-}
-
-    return back()->with(
-        'success',
-        'E-Certificate berhasil diterbitkan dan dikirim kepada peserta event.'
-    );
-}
 }
